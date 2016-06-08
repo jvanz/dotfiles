@@ -137,5 +137,9 @@ au BufRead COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 " See http://vim.wikia.com/wiki/Remove_unwanted_spaces
 autocmd BufWritePre * :%s/\s\+$//e
 
+"ctrlp plugin config
 let g:ctrlp_working_path_mode = 'ra'
 
+"vim-multiples-cursors
+let g:multi_cursor_prev_key='<C-b>'
+let g:multi_cursor_next_key='<C-m>'
