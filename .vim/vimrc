@@ -27,14 +27,12 @@ function! GetRunningOS()
 	endif
 endfunction
 
-if !has('nvim')
-	if GetRunningOS()=~ 'fedora'
-		python from powerline.vim import setup as powerline_setup
-		python powerline_setup()
-		python del powerline_setup
-		set laststatus=2
-		set t_Co=256
-	endif
+if GetRunningOS()=~ 'fedora'
+	python from powerline.vim import setup as powerline_setup
+	python powerline_setup()
+	python del powerline_setup
+	set laststatus=2
+	set t_Co=256
 endif
 
 
@@ -50,31 +48,16 @@ set cursorline
 nmap <F8> :TagbarToggle<CR>
 "Toggle NERDTree plugin
 nmap <F7> :NERDTreeToggle<CR>
-let mapleader="-"
+let mapleader=","
 let maplocalleader="\\"
 "Move the current line down
 map - dd _p
-"Delete the current line
-noremap <c-d> dd
-""Go to beginning of the line
-inoremap <c-h> <esc>^i
-"Move line down
-inoremap <c-j> <esc>:m .+1<cr>==i
-"Move line up
-inoremap <c-k> <esc>:m .-2<cr>==i
-"Go to end of the line
-inoremap <c-l> <esc>$a
-""Uppercase the current word
-"inoremap <c-u> <esc>vawUi
-"nnoremap <c-u> vawU<esc>
 "Edit vimrc
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 ""Load vimrc
 nnoremap <leader>sv :source $MYVIMRC<cr>
 "Surrond the current word with double quotes
 nnoremap <leader>" viw<esc>a"<esc>hbi"<esc>lel
-""Surrond the current word with single quotes
-nnoremap <leader>' viw<esc>a'<esc>hbi'<esc>lel
 "Close current tab
 nnoremap tc :tabclose<cr>
 "New tab
@@ -83,8 +66,6 @@ nnoremap tn :tabnew<cr>
 nnoremap tj  :tabnext<CR>
 "Go to previous tab
 nnoremap tk  :tabprev<CR>
-"Surrond the selection with double quotes
-vnoremap " <esc>`<i"<esc>`>la"<esc>
 ""Go to normal mode from insert mode
 inoremap jk <esc>
 "Disable esc key
@@ -94,13 +75,6 @@ noremap <Up> <nop>
 noremap <Down> <nop>
 noremap <Left> <nop>
 noremap <Right> <nop>
-
-onoremap p i(
-onoremap b /return<cr>
-onoremap in( :<c-u>normal! f(vi(<cr>
-onoremap il( :<c-u>normal! F)vi(<cr>
-onoremap in[ :<c-u>normal! f[vi[<cr>
-onoremap il] :<c-u>normal! F]vi[<cr>
 
 inoremap {      {}<Left>
 inoremap {<CR>  {<CR>}<Esc>O
