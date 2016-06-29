@@ -10,3 +10,6 @@
 [submodule "vim-multiples-cursors"]
 	path = .vim/bundle/vim-multiples-cursors
 	url = https://github.com/terryma/vim-multiple-cursors.git
+[submodule "vim-scala"]
+	path = .vim/bundle/vim-scala
+	url = https://github.com/derekwyatt/vim-scala.git
