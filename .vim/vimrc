@@ -76,29 +76,10 @@ noremap <Down> <nop>
 noremap <Left> <nop>
 noremap <Right> <nop>
 
-inoremap {      {}<Left>
-inoremap {<CR>  {<CR>}<Esc>O
-inoremap {{     {
-inoremap {}     {}
-inoremap [      []<Left>
-inoremap [<CR>  [<CR>]<Esc>O
-inoremap [[     [
-inoremap []     []
-inoremap (      ()<Left>
-inoremap (<CR>  (<CR>)<Esc>O
-inoremap ((     (
-inoremap ()     ()
-
-inoremap '      ''<Left>
-inoremap ''     ''
-inoremap "      ""<Left>
-inoremap ""     ""
-
 augroup filetype_html
 	autocmd!
 	autocmd FileType html nnoremap <buffer> <localleader>f Vatzf
 augroup END
-
 
 "Abbreviations
 iabbrev @@ guilherme.sft@gmail.com
