@@ -3,7 +3,7 @@
 import vim
 from requests import get
 
-OPEN_WEATHER_API_KEY = "42739d89cd645b2c46727446f5828028"
+OPEN_WEATHER_API_KEY = "your Open Weather API key"
 
 def get_weather():
     """
