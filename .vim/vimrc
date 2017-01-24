@@ -115,6 +115,3 @@ set listchars=tab:▸\ ,eol:¬,trail:⋅,extends:❯,precedes:❮
 highlight SpecialKey ctermbg=none
 set showbreak=↪
 nmap <leader>l :set list!<cr>
-
-" load vim.py function
-py3file $HOME/.vim/weather.py
