@@ -1,6 +1,9 @@
 "pathogen https://github.com/tpope/vim-pathogen
 execute pathogen#infect()
 
+"I do not use vi. I can turn off this config
+set nocompatible
+
 syntax enable
 set number
 set hlsearch
@@ -11,10 +14,14 @@ set shiftwidth=8
 set noexpandtab
 set clipboard+=unnamed
 set nocscopeverbose
-filetype indent on
 "indent"
+filetype indent on
 filetype plugin on
 set omnifunc=syntaxcomplete#Complete
+"allow vim to search in directories
+set path+=**
+"display all matching file when we tab complete
+set wildmenu
 "colorscheme
 colorscheme kolor
 set spell
