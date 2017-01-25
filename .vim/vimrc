@@ -52,7 +52,7 @@ endif
 set cursorline
 "mapping
 "Tagbar plugin mapping
-nmap <F8> :TagbarToggle<CR>
+"nmap <F8> :TagbarToggle<CR>
 "Toggle NERDTree plugin
 nmap <F7> :NERDTreeToggle<CR>
 let mapleader=","
