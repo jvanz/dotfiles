@@ -16,3 +16,9 @@
 [submodule "vim-surround"]
 	path = .vim/bundle/vim-surround
 	url = https://github.com/tpope/vim-surround
+[submodule "gyp.vim"]
+	path = .vim/bundle/gyp.vim
+	url = https://github.com/kelan/gyp.vim
+[submodule ".vim/bundle/vim-quantum"]
+	path = .vim/bundle/vim-quantum
+	url = git@github.com:tyrannicaltoucan/vim-quantum.git
