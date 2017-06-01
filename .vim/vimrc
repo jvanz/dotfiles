@@ -29,9 +29,11 @@ set spell
 function! GetRunningOS()
 	if system('uname -v')=~ 'Ubuntu'
 		return 'ubuntu'
-	else
-		return 'fedora'
 	endif
+	if system('uname -v')=~ 'Darwin'
+		return 'macos'
+	endif
+	return 'fedora'
 endfunction
 
 if GetRunningOS()=~ 'fedora'
