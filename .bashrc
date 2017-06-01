@@ -4,7 +4,6 @@ alias myip="curl http://ipecho.net/plain; echo"
 alias ..="cd .."
 alias ...="cd ../.."
 alias clipboard='xclip -sel clip'
-alias tmux="env TERM=xterm-256color tmux"
 
 export MAINTAINER="guilherme.sft@gmail.com"
 export MALLOC_PERTURB_=$(($RANDOM % 255 + 1))
