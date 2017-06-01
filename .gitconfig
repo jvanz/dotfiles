@@ -10,3 +10,10 @@
 [user]
 	email = guilherme.sft@gmail.com
 	name = José Guilherme Vanz
+
+[sendemail]
+	smtpEncryption = tls
+	smtpServer = smtp.gmail.com
+	smtpUser = guilherme.sft@gmail.com
+	smtpServerPort = 587
+
