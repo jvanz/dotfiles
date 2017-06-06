@@ -22,3 +22,6 @@
 [submodule ".vim/bundle/vim-quantum"]
 	path = .vim/bundle/vim-quantum
 	url = git@github.com:tyrannicaltoucan/vim-quantum.git
+[submodule "nerdcommenter"]
+	path = .vim/bundle/nerdcommenter
+	url = https://github.com/scrooloose/nerdcommenter.git
