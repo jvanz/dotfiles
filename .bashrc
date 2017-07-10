@@ -8,6 +8,7 @@ alias clipboard='xclip -sel clip'
 export MAINTAINER="guilherme.sft@gmail.com"
 export MALLOC_PERTURB_=$(($RANDOM % 255 + 1))
 export EDITOR="vim"
+export GYP_GENERATORS=ninja
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
