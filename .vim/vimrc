@@ -108,6 +108,9 @@ let g:ctrlp_working_path_mode = 'ra'
 let g:multi_cursor_prev_key='<C-b>'
 let g:multi_cursor_next_key='<C-m>'
 
+"vim-signify
+let g:signify_vcs_list = [ 'git', 'hg', 'svn' ]
+
 " disable Ex mode
 noremap Q <NOP>
 
