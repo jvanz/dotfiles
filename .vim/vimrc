@@ -1,5 +1,19 @@
-"pathogen https://github.com/tpope/vim-pathogen
-execute pathogen#infect()
+
+" Plugins...
+call plug#begin('~/.vim/plugged')
+Plug 'kristijanhusak/vim-hybrid-material'
+Plug 'mhinz/vim-signify'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-fugitive'
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdtree'
+Plug 'farmergreg/vim-lastplace'
+Plug 'tyrannicaltoucan/vim-quantum'
+Plug 'tpope/vim-surround'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'kien/ctrlp.vim'
+call plug#end()
 
 "I do not use vi. I can turn off this config
 set nocompatible
@@ -25,6 +39,8 @@ set wildmenu
 "colorscheme
 set background=dark
 colorscheme hybrid_material
+let g:airline_theme = "hybrid"
+
 set spell
 
 function! GetRunningOS()
