@@ -7,6 +7,7 @@
 	branches = branch -a
 	remotes = remote -v
 	st = status
+	cms = commit -s
 [user]
 	email = guilherme.sft@gmail.com
 	name = José Guilherme Vanz
