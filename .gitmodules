@@ -31,3 +31,6 @@
 [submodule ".vim/bundle/vim-signify"]
 	path = .vim/bundle/vim-signify
 	url = git@github.com:mhinz/vim-signify.git
+[submodule "vim-hybrid-material"]
+	path = .vim/bundle/vim-hybrid-material
+	url = https://github.com/kristijanhusak/vim-hybrid-material

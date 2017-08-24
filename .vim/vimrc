@@ -23,7 +23,8 @@ set path+=**
 "display all matching file when we tab complete
 set wildmenu
 "colorscheme
-colorscheme kolor
+set background=dark
+colorscheme hybrid_material
 set spell
 
 function! GetRunningOS()
