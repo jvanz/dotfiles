@@ -36,12 +36,16 @@ set omnifunc=syntaxcomplete#Complete
 set path+=**
 "display all matching file when we tab complete
 set wildmenu
+set spell
+" disable Ex mode
+noremap Q <NOP>
+
 "colorscheme
 set background=dark
 colorscheme hybrid_material
-let g:airline_theme = "hybrid"
 
-set spell
+let mapleader=","
+let maplocalleader="\\"
 
 function! GetRunningOS()
 	if system('uname -v')=~ 'Ubuntu'
@@ -53,20 +57,13 @@ function! GetRunningOS()
 	return 'fedora'
 endfunction
 
-"NERDTree ignore file types
-let NERDTreeIgnore = ['\.pyc$']
 if &term != "xterm"
 	let &colorcolumn="80,".join(range(120,999),",")
 endif
+
 "highlighting line number"
 set cursorline
-"mapping
-"Tagbar plugin mapping
-"nmap <F8> :TagbarToggle<CR>
-"Toggle NERDTree plugin
-nmap <F7> :NERDTreeToggle<CR>
-let mapleader=","
-let maplocalleader="\\"
+
 "Move the current line down
 map - dd _p
 "Edit vimrc
@@ -99,8 +96,6 @@ augroup filetype_html
 augroup END
 
 "Abbreviations
-iabbrev @@ guilherme.sft@gmail.com
-iabbrev ccopy Copyright 2014 José Guilherme Vanz, all rights reserved
 iabbrev ssig -- <cr>José Guilherme Vanz<cr>guilherme.sft@gmail.com
 
 au BufRead COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
@@ -109,6 +104,14 @@ au BufRead COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 " See http://vim.wikia.com/wiki/Remove_unwanted_spaces
 autocmd BufWritePre * :%s/\s\+$//e
 
+" toggle invisible characters
+set invlist
+set listchars=tab:▸\ ,eol:¬,trail:⋅,extends:❯,precedes:❮
+highlight SpecialKey ctermbg=none
+set showbreak=↪
+nmap <leader>l :set list!<cr>
+
+" plugins
 "ctrlp plugin config
 let g:ctrlp_working_path_mode = 'ra'
 
@@ -119,12 +122,12 @@ let g:multi_cursor_next_key='<C-m>'
 "vim-signify
 let g:signify_vcs_list = [ 'git', 'hg', 'svn' ]
 
-" disable Ex mode
-noremap Q <NOP>
+"Toggle NERDTree plugin
+nmap <leader>n :NERDTreeToggle<CR>
+"NERDTree ignore file types
+let NERDTreeIgnore = ['\.pyc$']
 
-" toggle invisible characters
-set invlist
-set listchars=tab:▸\ ,eol:¬,trail:⋅,extends:❯,precedes:❮
-highlight SpecialKey ctermbg=none
-set showbreak=↪
-nmap <leader>l :set list!<cr>
+" vim airline
+let g:airline_theme='quantum'
+let g:airline_powerline_fonts=1
+
