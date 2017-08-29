@@ -89,6 +89,10 @@ noremap <Up> <nop>
 noremap <Down> <nop>
 noremap <Left> <nop>
 noremap <Right> <nop>
+"folding
+let javaScript_fold=1
+let sh_fold_enabled=1
+let c_fold_enabled=1
 
 augroup filetype_html
 	autocmd!
