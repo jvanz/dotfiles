@@ -42,7 +42,7 @@ noremap Q <NOP>
 
 "colorscheme
 set background=dark
-colorscheme hybrid_material
+colorscheme quantum
 
 let mapleader=","
 let maplocalleader="\\"
@@ -89,7 +89,11 @@ noremap <Up> <nop>
 noremap <Down> <nop>
 noremap <Left> <nop>
 noremap <Right> <nop>
+
 "folding
+set foldmethod=syntax
+set foldlevelstart=1
+set foldnestmax=2
 let javaScript_fold=1
 let sh_fold_enabled=1
 let c_fold_enabled=1
@@ -115,6 +119,10 @@ highlight SpecialKey ctermbg=none
 set showbreak=↪
 nmap <leader>l :set list!<cr>
 
+if has('termguicolors')
+	set termguicolors
+endif
+
 " plugins
 "ctrlp plugin config
 let g:ctrlp_working_path_mode = 'ra'
@@ -123,15 +131,16 @@ let g:ctrlp_working_path_mode = 'ra'
 let g:multi_cursor_prev_key='<C-b>'
 let g:multi_cursor_next_key='<C-m>'
 
-"vim-signify
-let g:signify_vcs_list = [ 'git', 'hg', 'svn' ]
-
 "Toggle NERDTree plugin
 nmap <leader>n :NERDTreeToggle<CR>
 "NERDTree ignore file types
 let NERDTreeIgnore = ['\.pyc$']
 
-" vim airline
+let g:signify_vcs_list = [ 'git', 'hg', 'svn' ]
 let g:airline_theme='quantum'
+let g:enable_bold_font=1
 let g:airline_powerline_fonts=1
+let g:quantum_black=1
+let g:quantum_italics=1
+set background=dark
 
