@@ -42,20 +42,14 @@ noremap Q <NOP>
 
 "colorscheme
 set background=dark
-colorscheme quantum
+if system('uname -v')=~ 'Ubuntu'
+	colorscheme hybrid_material
+else
+	colorscheme quantum
+endif
 
 let mapleader=","
 let maplocalleader="\\"
-
-function! GetRunningOS()
-	if system('uname -v')=~ 'Ubuntu'
-		return 'ubuntu'
-	endif
-	if system('uname -v')=~ 'Darwin'
-		return 'macos'
-	endif
-	return 'fedora'
-endfunction
 
 if &term != "xterm"
 	let &colorcolumn="80,".join(range(120,999),",")
