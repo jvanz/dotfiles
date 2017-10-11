@@ -3,7 +3,8 @@
 dirname=$(dirname $(readlink -f $0))
 
 sudo dnf update -y
-sudo dnf install -y vim tmux powerline tmux-powerline docker ninja-build gyp gcc-c++ gtest-devel gnome-tweak-tool
+sudo dnf install -y vim tmux powerline tmux-powerline docker ninja-build gyp \
+	gcc-c++ gtest-devel gnome-tweak-tool ctags
 
 rm -f $HOME/{.vim,.gitconfig,.tmux.conf,.fedora.conf}
 
