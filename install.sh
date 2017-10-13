@@ -6,6 +6,9 @@ sudo dnf update -y
 sudo dnf install -y vim tmux powerline tmux-powerline docker ninja-build gyp \
 	gcc-c++ gtest-devel gnome-tweak-tool ctags
 
+# install default python packages
+pip install --user powerline-status
+
 rm -f $HOME/{.vim,.gitconfig,.tmux.conf,.fedora.conf}
 
 ln -s $dirname/.vim $HOME/.vim
