@@ -11,6 +11,8 @@ export MALLOC_PERTURB_=$(($RANDOM % 255 + 1))
 export EDITOR="vim"
 export GYP_GENERATORS=ninja
 
+export PATH=$PATH:$HOME/.local/bin
+
 # Source global definitions
 if [ -f /etc/bashrc ]; then
         . /etc/bashrc
