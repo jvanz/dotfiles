@@ -47,7 +47,7 @@ else
 	colorscheme quantum
 endif
 
-let mapleader=","
+let mapleader=" "
 let maplocalleader="\\"
 
 if &term != "xterm"
