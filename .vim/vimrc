@@ -75,6 +75,14 @@ nnoremap tj  :tabnext<CR>
 nnoremap tk  :tabprev<CR>
 ""Go to normal mode from insert mode
 inoremap jk <esc>
+"Go to left window
+nnoremap <leader>h  :wincmd h<CR>
+"Go to right window
+nnoremap <leader>l  :wincmd l<CR>
+"Go to top window
+nnoremap <leader>j  :wincmd j<CR>
+"Go to bottom window
+nnoremap <leader>k  :wincmd k<CR>
 "Disable esc key
 inoremap <esc> <nop>
 ""Disable arrows keys! Use vim correctly
@@ -110,7 +118,7 @@ set invlist
 set listchars=tab:▸\ ,eol:¬,trail:⋅,extends:❯,precedes:❮
 highlight SpecialKey ctermbg=none
 set showbreak=↪
-nmap <leader>l :set list!<cr>
+nmap <leader>ll :set list!<cr>
 
 if has('termguicolors')
 	set termguicolors
