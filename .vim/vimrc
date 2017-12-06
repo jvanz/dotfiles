@@ -40,14 +40,9 @@ set spell
 noremap Q <NOP>
 
 "colorscheme
-set background=dark
-if system('uname -v')=~ 'Ubuntu'
-	colorscheme hybrid_material
-else
-	colorscheme quantum
-endif
+colorscheme quantum
 
-let mapleader=" "
+let mapleader=","
 let maplocalleader="\\"
 
 if &term != "xterm"
