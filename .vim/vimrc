@@ -12,6 +12,7 @@ Plug 'farmergreg/vim-lastplace'
 Plug 'tyrannicaltoucan/vim-quantum'
 Plug 'tpope/vim-surround'
 Plug 'kien/ctrlp.vim'
+Plug 'stfl/meson.vim'
 call plug#end()
 
 "I do not use vi. I can turn off this config
