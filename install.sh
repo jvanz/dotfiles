@@ -9,6 +9,8 @@ sudo dnf install -y vim tmux powerline tmux-powerline docker ninja-build gyp \
 # install default python packages
 pip install --user powerline-status
 
+pip3 install --user meson
+
 rm -f $HOME/{.vim,.gitconfig,.tmux.conf,.fedora.conf}
 
 ln -s $dirname/.vim $HOME/.vim
