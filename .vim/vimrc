@@ -107,7 +107,7 @@ au BufRead COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 
 " Remove all trailing whitespace when saving
 " See http://vim.wikia.com/wiki/Remove_unwanted_spaces
-autocmd BufWritePre * :%s/\s\+$//e
+autocmd FileType c,cpp,javascript,python autocmd BufWritePre * :%s/\s\+$//e
 
 " toggle invisible characters
 set invlist
