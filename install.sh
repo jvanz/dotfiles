@@ -4,10 +4,12 @@ dirname=$(dirname $(readlink -f $0))
 
 sudo dnf update -y
 sudo dnf install -y vim tmux powerline tmux-powerline docker ninja-build gyp \
-	gcc-c++ gtest-devel gnome-tweak-tool ctags doxygen git-email
+	gcc-c++ gtest-devel gnome-tweak-tool ctags doxygen git-email clang gdb
 
 # install default python packages
 pip install --user powerline-status
+
+pip3 install --user meson
 
 rm -f $HOME/{.vim,.gitconfig,.tmux.conf,.fedora.conf}
 

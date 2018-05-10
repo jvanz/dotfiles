@@ -13,6 +13,7 @@ Plug 'tyrannicaltoucan/vim-quantum'
 Plug 'tpope/vim-surround'
 Plug 'kien/ctrlp.vim'
 Plug 'fatih/vim-go'
+Plug 'stfl/meson.vim'
 call plug#end()
 
 "I do not use vi. I can turn off this config
@@ -41,14 +42,9 @@ set spell
 noremap Q <NOP>
 
 "colorscheme
-set background=dark
-if system('uname -v')=~ 'Ubuntu'
-	colorscheme hybrid_material
-else
-	colorscheme quantum
-endif
+colorscheme quantum
 
-let mapleader=" "
+let mapleader=","
 let maplocalleader="\\"
 
 if &term != "xterm"
@@ -112,7 +108,7 @@ au BufRead COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 
 " Remove all trailing whitespace when saving
 " See http://vim.wikia.com/wiki/Remove_unwanted_spaces
-autocmd BufWritePre * :%s/\s\+$//e
+autocmd FileType c,cpp,javascript,python autocmd BufWritePre * :%s/\s\+$//e
 
 " toggle invisible characters
 set invlist
