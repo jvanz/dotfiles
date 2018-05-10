@@ -12,6 +12,7 @@ Plug 'farmergreg/vim-lastplace'
 Plug 'tyrannicaltoucan/vim-quantum'
 Plug 'tpope/vim-surround'
 Plug 'kien/ctrlp.vim'
+Plug 'fatih/vim-go'
 call plug#end()
 
 "I do not use vi. I can turn off this config
@@ -144,4 +145,8 @@ let g:airline_powerline_fonts=1
 let g:quantum_black=1
 let g:quantum_italics=1
 set background=dark
+
+"vim-go
+"disable warning in older Vim version
+let g:go_version_warning = 0
 
