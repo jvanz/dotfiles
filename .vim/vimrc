@@ -9,11 +9,14 @@ Plug 'tpope/vim-fugitive'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
 Plug 'farmergreg/vim-lastplace'
-Plug 'tyrannicaltoucan/vim-quantum'
 Plug 'tpope/vim-surround'
 Plug 'kien/ctrlp.vim'
 Plug 'fatih/vim-go'
 Plug 'stfl/meson.vim'
+
+"color schemes
+Plug 'tyrannicaltoucan/vim-quantum'
+Plug 'kristijanhusak/vim-hybrid-material'
 call plug#end()
 
 "I do not use vi. I can turn off this config
@@ -41,10 +44,11 @@ set spell
 " disable Ex mode
 noremap Q <NOP>
 
-"colorscheme
-colorscheme quantum
+"color scheme
+set background=dark
+colorscheme hybrid_reverse
 
-let mapleader=","
+let mapleader="/"
 let maplocalleader="\\"
 
 if &term != "xterm"
@@ -122,6 +126,9 @@ if has('termguicolors')
 endif
 
 " plugins
+let g:signify_vcs_list = [ 'git', 'hg', 'svn' ]
+let g:enable_bold_font=1
+
 "ctrlp plugin config
 let g:ctrlp_working_path_mode = 'ra'
 
@@ -134,13 +141,9 @@ nmap <leader>n :NERDTreeToggle<CR>
 "NERDTree ignore file types
 let NERDTreeIgnore = ['\.pyc$']
 
-let g:signify_vcs_list = [ 'git', 'hg', 'svn' ]
-let g:airline_theme='quantum'
-let g:enable_bold_font=1
+"airline plugin
 let g:airline_powerline_fonts=1
-let g:quantum_black=1
-let g:quantum_italics=1
-set background=dark
+let g:airline_theme='quantum'
 
 "vim-go
 "disable warning in older Vim version
