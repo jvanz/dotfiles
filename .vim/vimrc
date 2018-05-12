@@ -126,8 +126,10 @@ if has('termguicolors')
 endif
 
 " plugins
-let g:signify_vcs_list = [ 'git', 'hg', 'svn' ]
 let g:enable_bold_font=1
+
+"signify
+let g:signify_vcs_list = [ 'git', 'hg', 'svn' ]
 
 "ctrlp plugin config
 let g:ctrlp_working_path_mode = 'ra'
