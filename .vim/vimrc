@@ -48,7 +48,7 @@ noremap Q <NOP>
 set background=dark
 colorscheme hybrid_reverse
 
-let mapleader="/"
+let mapleader="mk"
 let maplocalleader="\\"
 
 if &term != "xterm"
