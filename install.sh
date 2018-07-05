@@ -5,7 +5,7 @@ dirname=$(dirname $(readlink -f $0))
 sudo dnf update -y
 sudo dnf install -y vim tmux powerline tmux-powerline docker ninja-build gyp \
 	gcc-c++ gtest-devel gnome-tweak-tool ctags doxygen git-email clang gdb \
-	golang
+	golang buildah podman
 
 # install default python packages
 pip install --user powerline-status
