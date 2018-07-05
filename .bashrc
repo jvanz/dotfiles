@@ -12,6 +12,8 @@ export EDITOR="vim"
 export GYP_GENERATORS=ninja
 export GOPATH=$HOME/go
 
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$HOME/.local/share/pkgconfig
+
 export PATH=$PATH:$HOME/.local/bin:$GOPATH/bin
 
 # Source global definitions
