@@ -6,7 +6,7 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias clipboard='xclip -sel clip'
 
-export MAINTAINER="guilherme.sft@gmail.com"
+export MAINTAINER="jvanz@jvanz.com"
 export MALLOC_PERTURB_=$(($RANDOM % 255 + 1))
 export EDITOR="vim"
 export GYP_GENERATORS=ninja
