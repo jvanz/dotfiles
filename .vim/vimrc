@@ -41,6 +41,10 @@ set path+=**
 "display all matching file when we tab complete
 set wildmenu
 set spell
+
+" Keep undo history between sessions
+set undodir=~/.vim/undodir
+
 " disable Ex mode
 noremap Q <NOP>
 
