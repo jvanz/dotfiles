@@ -17,6 +17,10 @@ Plug 'stfl/meson.vim'
 "color schemes
 Plug 'tyrannicaltoucan/vim-quantum'
 Plug 'kristijanhusak/vim-hybrid-material'
+Plug 'trevordmiller/nova-vim'
+Plug 'jnurmine/Zenburn'
+Plug 'tomasr/molokai'
+Plug 'NLKNguyen/papercolor-theme'
 call plug#end()
 
 "I do not use vi. I can turn off this config
@@ -49,8 +53,7 @@ set undodir=~/.vim/undodir
 noremap Q <NOP>
 
 "color scheme
-set background=dark
-colorscheme hybrid_reverse
+colorscheme quantum
 
 let mapleader="mk"
 let maplocalleader="\\"
