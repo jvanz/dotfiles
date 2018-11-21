@@ -60,7 +60,7 @@ colorscheme quantum
 let mapleader="mk"
 let maplocalleader="\\"
 
-if &term != "xterm"
+if &term != "xterm" && exists('+colorcolumn')
 	let &colorcolumn="80,".join(range(120,999),",")
 endif
 
