@@ -46,8 +46,10 @@ set path+=**
 set wildmenu
 set spell
 
-" Keep undo history between sessions
-set undodir=~/.vim/undodir
+if version >= 703
+	" Keep undo history between sessions
+	set undodir=~/.vim/undodir
+endif
 
 " disable Ex mode
 noremap Q <NOP>
