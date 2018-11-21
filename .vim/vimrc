@@ -55,7 +55,14 @@ endif
 noremap Q <NOP>
 
 "color scheme
-colorscheme quantum
+try
+	" try the favorite color scheme
+	colorscheme quantum
+catch
+	" if it is not possible to use the favorite color scheme
+	" uses the default one
+	colorscheme default
+endtry
 
 let mapleader="mk"
 let maplocalleader="\\"
