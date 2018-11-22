@@ -11,6 +11,8 @@
 [user]
 	name = José Guilherme Vanz
 	email = jvanz@jvanz.com
+[includeIf "gitdir:**/jguilhermevanz/**"]
+	path = ~/.gitconfig.suse
 
 [sendemail]
 	smtpEncryption = tls
