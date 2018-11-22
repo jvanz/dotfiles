@@ -9,8 +9,8 @@
 	st = status
 	cms = commit -s
 [user]
-	email = guilherme.sft@gmail.com
 	name = José Guilherme Vanz
+	email = jvanz@jvanz.com
 
 [sendemail]
 	smtpEncryption = tls
