@@ -19,4 +19,5 @@
 	smtpServer = smtp.gmail.com
 	smtpUser = guilherme.sft@gmail.com
 	smtpServerPort = 587
-
+[pager]
+	branch = false
