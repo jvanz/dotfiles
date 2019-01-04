@@ -8,6 +8,7 @@
 	remotes = remote -v
 	st = status
 	cms = commit -s
+	co = checkout
 [user]
 	name = José Guilherme Vanz
 	email = jvanz@jvanz.com
