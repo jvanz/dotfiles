@@ -13,6 +13,7 @@ Plug 'tpope/vim-surround'
 Plug 'kien/ctrlp.vim'
 Plug 'fatih/vim-go'
 Plug 'stfl/meson.vim'
+Plug 'TaDaa/vimade'	"highlight the active buffer
 
 "color schemes
 Plug 'tyrannicaltoucan/vim-quantum'
@@ -166,4 +167,15 @@ let g:airline_theme='quantum'
 "vim-go
 "disable warning in older Vim version
 let g:go_version_warning = 0
+
+"vimade
+let g:vimade = {
+  \ "normalid": '',
+  \ "basefg": '',
+  \ "basebg": '',
+  \ "fadelevel": 0.4,
+  \ "colbufsize": 30,
+  \ "rowbufsize": 30,
+  \ "checkinterval": 32 }
+
 
