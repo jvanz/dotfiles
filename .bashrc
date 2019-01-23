@@ -15,7 +15,7 @@ export GOPATH=$HOME/go
 
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$HOME/.local/share/pkgconfig:$HOME/.local/lib/pkgconfig
 
-export PATH=$PATH:$HOME/.local/bin:$GOPATH/bin
+export PATH=$PATH:$HOME/.local/bin:$GOPATH/bin:$HOME/.local/usr/bin
 
 # consider packages installed in the home directory
 export CFLAGS="$CFLAGS -I$HOME/.local/include"
