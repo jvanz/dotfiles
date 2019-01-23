@@ -5,6 +5,7 @@ alias myip="curl http://ipecho.net/plain; echo"
 alias ..="cd .."
 alias ...="cd ../.."
 alias clipboard='xclip -sel clip'
+alias osc='osc -A opensuse'
 
 export MAINTAINER="jvanz@jvanz.com"
 export MALLOC_PERTURB_=$(($RANDOM % 255 + 1))
