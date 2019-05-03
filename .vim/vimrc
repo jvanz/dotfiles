@@ -65,7 +65,7 @@ catch
 	colorscheme default
 endtry
 
-let mapleader="mk"
+let mapleader=" "
 let maplocalleader="\\"
 
 if &term != "xterm" && exists('+colorcolumn')
@@ -109,6 +109,9 @@ noremap <Down> <nop>
 noremap <Left> <nop>
 noremap <Right> <nop>
 
+let g:netrw_winsize = 10
+nnoremap <leader>f  :Vex<CR>
+
 "folding
 set foldmethod=syntax
 set foldlevelstart=1
@@ -129,7 +132,7 @@ au BufRead COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 
 " Remove all trailing whitespace when saving
 " See http://vim.wikia.com/wiki/Remove_unwanted_spaces
-autocmd FileType c,cpp,javascript,python autocmd BufWritePre * :%s/\s\+$//e
+autocmd FileType c,cpp,javascript,python,sql,text autocmd BufWritePre * :%s/\s\+$//e
 
 " toggle invisible characters
 set invlist
