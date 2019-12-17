@@ -14,6 +14,11 @@ Plug 'kien/ctrlp.vim'
 Plug 'fatih/vim-go'
 Plug 'stfl/meson.vim'
 Plug 'saltstack/salt-vim'
+" snippets
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'rust-lang/rust.vim'
+
 
 "color schemes
 Plug 'tyrannicaltoucan/vim-quantum'
@@ -181,4 +186,8 @@ let g:vimade = {
   \ "rowbufsize": 30,
   \ "checkinterval": 32 }
 
-
+" snippets
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsEditSplit="vertical"
