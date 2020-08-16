@@ -1,6 +1,7 @@
 #!/bin/bash
 
 alias lt="ll -t"
+alias lst="ls -t"
 alias myip="curl http://ipecho.net/plain; echo"
 alias ..="cd .."
 alias ...="cd ../.."
