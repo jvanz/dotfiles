@@ -18,6 +18,8 @@ Plug 'saltstack/salt-vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'rust-lang/rust.vim'
+" latex
+Plug 'lervag/vimtex'
 
 
 "color schemes
