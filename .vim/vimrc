@@ -115,6 +115,11 @@ noremap <Up> <nop>
 noremap <Down> <nop>
 noremap <Left> <nop>
 noremap <Right> <nop>
+" Horizontal navigation shortcut
+"Move 20 characters to the right
+noremap <C-l> 20zl 
+"Move 20 characters to the left
+noremap <C-h> 20zh 
 
 let g:netrw_winsize = 10
 nnoremap <leader>f  :Vex<CR>
