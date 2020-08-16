@@ -12,7 +12,7 @@
 [user]
 	name = José Guilherme Vanz
 	email = jvanz@jvanz.com
-[includeIf "gitdir:**/jguilhermevanz/**"]
+[includeIf "gitdir:**/suse/**"]
 	path = ~/.gitconfig.suse
 
 [sendemail]
@@ -22,3 +22,8 @@
 	smtpServerPort = 587
 [pager]
 	branch = false
+	show = true
+[gpg]
+	program = gpg2
+[commit]
+	gpgsign = true
