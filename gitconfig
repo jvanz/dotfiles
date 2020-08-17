@@ -1,3 +1,6 @@
+[include]
+	path = ~/.gitconfig_user
+
 [alias]
 	lg = log --color --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	lgg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
@@ -9,21 +12,12 @@
 	st = status
 	cms = commit -s
 	co = checkout
-[user]
-	name = José Guilherme Vanz
-	email = jvanz@jvanz.com
-[includeIf "gitdir:**/suse/**"]
-	path = ~/.gitconfig.suse
 
-[sendemail]
-	smtpEncryption = tls
-	smtpServer = smtp.gmail.com
-	smtpUser = guilherme.sft@gmail.com
-	smtpServerPort = 587
+[includeIf "gitdir:**/suse/**"]
+	path = ~/.gitconfig_suse
+
 [pager]
 	branch = false
 	show = true
 [gpg]
 	program = gpg2
-[commit]
-	gpgsign = true
