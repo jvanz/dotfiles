@@ -7,6 +7,8 @@ SIGKEY := 4159E08B20565EF1
 
 all: uninstall install links config
 
+reconfigure: uninstall links config
+
 uninstall: 
 	rm -rf ~/.vim
 	rm -f ~/.tmux.conf
@@ -49,6 +51,7 @@ links:
 	ln -s $(PWD)/vim $(HOME)/.vim
 	ln -s $(PWD)/tmux.conf $(HOME)/.tmux.conf
 	ln -s $(PWD)/gitconfig $(HOME)/.gitconfig
+	ln -s $(PWD)/osc ~/.config/osc
 
 config:
 	echo "source $(PWD)/bashrc" >> $(HOME)/.bashrc
