@@ -6,12 +6,13 @@ EMAIL := jvanz@jvanz.com
 SIGKEY := 4159E08B20565EF1
 
 RSYNC_SERVICE_NAME := rsync-backup
+IMAPFILTER_SERVICE_NAME := imapfilter
 
 all: uninstall install links config
 
 reconfigure: uninstall links config
 
-uninstall: 
+uninstall: clean-rsync clean-imapfilter
 	rm -rf ~/.vim
 	rm -f ~/.tmux.conf
 	rm -f ~/$(GIT_USER_CONFIG)
@@ -33,6 +34,7 @@ install:
 		git-core \
 		git-email \
 		go \
+		imapfilter \
 		make \
 		meson \
 		neomutt \
@@ -41,6 +43,7 @@ install:
 		python-pip \
 		python3-pip \
 		rsync \
+		secret-tool \
 		strace \
 		tmux \
 		unzip \
@@ -80,3 +83,22 @@ rsync:  clean-rsync
 	sed -i "s;{{ONCALENDAR}};daily;" ~/.config/systemd/user/$(RSYNC_SERVICE_NAME).timer
 	systemctl --user enable ~/.config/systemd/user/$(RSYNC_SERVICE_NAME).timer
 	systemctl --user start $(RSYNC_SERVICE_NAME).timer
+
+clean-imapfilter:
+	rm -f ~/.config/systemd/user/$(IMAPFILTER_SERVICE_NAME).service
+	rm -f ~/.config/systemd/user/$(IMAPFILTER_SERVICE_NAME).timer
+
+imapfilter: clean-imapfilter
+	mkdir -p  ~/.config/systemd/user
+	cp $(PWD)/oneshoot-service.service ~/.config/systemd/user/$(IMAPFILTER_SERVICE_NAME).service
+	cp $(PWD)/oneshoot-service.timer ~/.config/systemd/user/$(IMAPFILTER_SERVICE_NAME).timer
+	sed -i "s/{{DESCRIPTION}}/Run imapfilter to organize email/" ~/.config/systemd/user/$(IMAPFILTER_SERVICE_NAME).service
+	sed -i "s/{{DOCUMENTATION}}/man:imapfilter\(1\)/" ~/.config/systemd/user/$(IMAPFILTER_SERVICE_NAME).service
+	sed -i "s;{{EXECSTART}};$(shell which imapfilter);" ~/.config/systemd/user/$(IMAPFILTER_SERVICE_NAME).service
+	sed -i "s/{{DESCRIPTION}}/Imapfilter timer/" ~/.config/systemd/user/$(IMAPFILTER_SERVICE_NAME).timer
+	sed -i "s;{{ONBOOTSEC}};1m;" ~/.config/systemd/user/$(IMAPFILTER_SERVICE_NAME).timer
+	sed -i "s;{{ONCALENDAR}};daily 12:00:00;" ~/.config/systemd/user/$(IMAPFILTER_SERVICE_NAME).timer
+	sed -i "/OnCalendar=daily 12:00:00/a OnCalendar=daily 18:00:00" ~/.config/systemd/user/$(IMAPFILTER_SERVICE_NAME).timer
+	systemctl --user enable ~/.config/systemd/user/$(IMAPFILTER_SERVICE_NAME).timer
+	systemctl --user start $(IMAPFILTER_SERVICE_NAME).timer
+
