@@ -17,6 +17,7 @@ uninstall: clean-rsync clean-imapfilter
 	rm -f ~/.tmux.conf
 	rm -f ~/$(GIT_USER_CONFIG)
 	rm -f ~/.gitconfig
+	rm -f ~/.config/osc
 
 install: 
 	sudo zypper install -y \
@@ -40,7 +41,9 @@ install:
 		neomutt \
 		ninja \
 		osc \
+		podman \
 		python-pip \
+		python3-docker-compose \
 		python3-pip \
 		rsync \
 		secret-tool \
