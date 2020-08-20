@@ -1,0 +1,7 @@
+[Unit]
+Description={{DESCRIPTION}}
+Documentation={{DOCUMENTATION}}
+
+[Service]
+Type=oneshot
+ExecStart={{EXECSTART}}

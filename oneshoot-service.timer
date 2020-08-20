@@ -1,0 +1,9 @@
+[Unit]
+Description={{DESCRIPTION}}
+
+[Timer]
+OnBootSec={{ONBOOTSEC}}
+OnCalendar={{ONCALENDAR}}
+
+[Install]
+WantedBy=default.target
