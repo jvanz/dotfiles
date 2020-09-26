@@ -1,2 +1,6 @@
 [user]
+	name = José Guilherme Vanz
 	email = jguilhermevanz@suse.com
+	signingkey = 53CE8868950F3638
+[commit]
+	gpgsign = true

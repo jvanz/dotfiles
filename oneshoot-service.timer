@@ -2,8 +2,8 @@
 Description={{DESCRIPTION}}
 
 [Timer]
-OnBootSec={{ONBOOTSEC}}
 OnCalendar={{ONCALENDAR}}
+Unit={{UNIT}}
 
 [Install]
-WantedBy=default.target
+WantedBy={{WANTEDBY}}
