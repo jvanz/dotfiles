@@ -5,3 +5,6 @@ Documentation={{DOCUMENTATION}}
 [Service]
 Type=oneshot
 ExecStart={{EXECSTART}}
+
+[Install]
+WantedBy={{WANTEDBY}}

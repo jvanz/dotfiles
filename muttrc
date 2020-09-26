@@ -1,0 +1,216 @@
+# Sample ~/.muttrc for SUSE Linux
+
+# Setting
+set pager_context=4
+set pager_index_lines=10
+set pager_stop
+
+# Binding
+bind  pager <backspace> previous-page
+bind  pager -           previous-line
+bind  pager \eOm        previous-line
+bind  pager +           next-line
+bind  pager \eOk        next-line
+bind  pager \eOM        next-line
+bind  pager \e[1~       top
+bind  pager \e[4~       bottom
+
+bind  index <backspace> previous-entry
+bind  index -           previous-entry
+bind  index \eOm        previous-entry
+bind  index +           next-entry
+bind  index \eOk        next-entry
+bind  index \eOM        display-message
+bind  index \e[H        first-entry
+bind  index \e[F        last-entry
+bind  index \e[1~       first-entry
+bind  index \e[4~       last-entry
+
+bind  alias   <space>   select-entry
+bind  alias   x         exit
+bind  attach  x         exit
+bind  browser x         exit
+
+# What headers to show
+ignore *
+unignore from: date subject to cc reply-to:
+unignore resent- x-resent
+
+# What order to show them
+unhdr_order *
+hdr_order Date: From: To: Reply-To: Cc: Subject:
+
+# On to the colors
+color	attachment  blue         default
+color	header      green        default  "^message-id:"
+color	header      green        default  "^x-mailer:"
+color	header      green        default  "^user-agent:"
+color	header      blue         default  "^date: "
+color	header      brightblue   default  "^from: "
+color	header      green        default  "^subject: "
+color	header      brightblue   default  "^to: "
+color	header      brightblue   default  "^cc: "
+color	header      brightblue   default  "^reply-to: "
+color	index       green        default  ~F
+color	index       red          default  ~D
+color	index       blue         default  ~T
+color	index       brightblue   default  ~N
+color	indicator   brightwhite  blue
+color	markers     red          default
+color	quoted      magenta      default
+color	signature   brightblue   default
+color	status      brightwhite  green
+color	tilde       cyan         default
+color	tree        blue         default
+color	body        black        default  "(^| )_[-a-z0-9_]+_[,.?]?[ \n]"
+
+# Command formats for gpg.
+# 
+# This version uses gpg-2comp from 
+#   http://muppet.faveve.uni-stuttgart.de/~gero/gpg-2comp.tar.gz
+#
+# $Id: gpg.rc,v 3.1 2002/03/26 22:23:58 roessler Exp $
+#
+# %p    The empty string when no passphrase is needed,
+#       the string "PGPPASSFD=0" if one is needed.
+#
+#       This is mostly used in conditional % sequences.
+#
+# %f    Most PGP commands operate on a single file or a file
+#       containing a message.  %f expands to this file's name.
+#
+# %s    When verifying signatures, there is another temporary file
+#       containing the detached signature.  %s expands to this
+#       file's name.
+#
+# %a    In "signing" contexts, this expands to the value of the
+#       configuration variable $pgp_sign_as.  You probably need to
+#       use this within a conditional % sequence.
+#
+# %r    In many contexts, mutt passes key IDs to pgp.  %r expands to
+#       a list of key IDs.
+
+# Note that we explicitly set the comment armor header since GnuPG, when used
+# in some localiaztion environments, generates 8bit data in that header, thereby
+# breaking PGP/MIME.
+
+# decode application/pgp
+set pgp_decode_command="/usr/bin/gpg  --charset utf-8   %?p?--passphrase-fd 0? --no-verbose --quiet  --batch  --output - %f"
+
+# verify a pgp/mime signature
+set pgp_verify_command="/usr/bin/gpg   --no-verbose --quiet  --batch  --output - --verify %s %f"
+
+# decrypt a pgp/mime attachment
+set pgp_decrypt_command="/usr/bin/gpg   --passphrase-fd 0 --no-verbose --quiet  --batch  --output - %f"
+
+# create a pgp/mime signed attachment
+# set pgp_sign_command="/usr/bin/gpg-2comp --comment '' --no-verbose --batch  --output - --passphrase-fd 0 --armor --detach-sign --textmode %?a?-u %a? %f"
+set pgp_sign_command="/usr/bin/gpg    --no-verbose --batch --quiet   --output - --passphrase-fd 0 --armor --detach-sign --textmode %?a?-u %a? %f"
+
+# create a application/pgp signed (old-style) message
+# set pgp_clearsign_command="/usr/bin/gpg-2comp --comment ''  --no-verbose --batch  --output - --passphrase-fd 0 --armor --textmode --clearsign %?a?-u %a? %f"
+set pgp_clearsign_command="/usr/bin/gpg   --charset utf-8 --no-verbose --batch --quiet   --output - --passphrase-fd 0 --armor --textmode --clearsign %?a?-u %a? %f"
+
+# create a pgp/mime encrypted attachment
+# set pgp_encrypt_only_command="pgpewrap gpg-2comp  -v --batch  --output - --encrypt --textmode --armor --always-trust -- -r %r -- %f"
+set pgp_encrypt_only_command="pgpewrap /usr/bin/gpg  --charset utf-8    --batch  --quiet  --no-verbose --output - --encrypt --textmode --armor --always-trust -- -r %r -- %f"
+
+# create a pgp/mime encrypted and signed attachment
+# set pgp_encrypt_sign_command="pgpewrap gpg-2comp  --passphrase-fd 0 -v --batch  --output - --encrypt --sign %?a?-u %a? --armor --always-trust -- -r %r -- %f"
+set pgp_encrypt_sign_command="pgpewrap /usr/bin/gpg  --charset utf-8 --passphrase-fd 0  --batch --quiet  --no-verbose  --textmode --output - --encrypt --sign %?a?-u %a? --armor --always-trust -- -r %r -- %f"
+
+# import a key into the public key ring
+set pgp_import_command="/usr/bin/gpg  --no-verbose --import -v %f"
+
+# export a key from the public key ring
+set pgp_export_command="/usr/bin/gpg   --no-verbose --export --armor %r"
+
+# verify a key
+set pgp_verify_key_command="/usr/bin/gpg   --verbose --batch  --fingerprint --check-sigs %r"
+
+# read in the public key ring
+set pgp_list_pubring_command="/usr/bin/gpg   --no-verbose --batch --quiet   --with-colons --list-keys %r" 
+
+# read in the secret key ring
+set pgp_list_secring_command="/usr/bin/gpg   --no-verbose --batch --quiet   --with-colons --list-secret-keys %r" 
+
+# fetch keys
+# set pgp_getkeys_command="pkspxycwrap %r"
+
+# pattern for good signature - may need to be adapted to locale!
+
+set pgp_good_sign="^gpg: Good signature from"
+
+# OK, here's a version which uses gnupg's message catalog:
+# set pgp_good_sign="`gettext -d gnupg -s 'Good signature from "' | tr -d '"'`"
+
+###############################################################################
+# Not from SUSE defaul config #
+
+set realname="José Guilherme Vanz"
+set my_date_format="%F"
+set my_datetime_format="$my_date_format at %H:%M:%S%z"
+set attribution="On %{$my_date_format}, %n <%A> wrote:"
+set editor="vim"
+set my_name="jguilhermevanz"
+set my_username="$my_name@suse.de"
+set from=$my_username
+
+# Set up folders.
+set mbox_type=Maildir
+set my_mailroot="$HOME/mail"
+set my_profile="suse"
+
+set folder="$my_mailroot/$my_profile"
+set spoolfile="+/Inbox"
+set imap_check_subscribed
+set trash="+Deleted Items"
+# TODO: These are probably broken...
+set record="!/Sent Items"
+set postponed="!/Drafts"
+set header_cache="$HOME/.cache/mutt"
+
+set smtp_url="smtp://$my_name@smtp.office365.com:587"
+set smtp_pass="`secret-tool lookup username jguilhermevanz@suse.com`"
+
+set pgp_default_key="9B833006E3B341AFAC1B710C53CE8868950F3638"
+# Don't ever do email operations over cleartext. Note that ssl_force_tls *does*
+# also force STARTTLS, and will cause connection attempts to fail if it cannot
+# establish a STARTTLS (or any other STARTTLS) connection. The documentation
+# doesn't mention this, but I've verified that OPT_SSL_FORCE_TLS is implemented
+# this way (in NeoMutt at least).
+set ssl_force_tls
+set ssl_starttls
+
+# Disable bad crypto. Anything pre-TLSv1 is broken.
+ifdef ssl_use_sslv2 'set nossl_use_sslv2' # No longer included in 1.10.0.
+set nossl_use_sslv3
+
+# PGP-related options.
+set crypt_use_gpgme
+set crypt_verify_sig
+set crypt_autosign
+set postpone_encrypt
+set pgp_auto_decode
+set pgp_self_encrypt
+set nosmime_is_default
+
+# Show threads.
+set sort=threads
+# Sort by the *sent* date.
+set sort_aux=last-date
+
+# Formatting of menus.
+set date_format=$my_date_format
+set compose_format=" [$my_profile] > Compose %> < %l <  "
+set pager_format=" [$my_profile] > %.20n > %s %>  [%Z] < %P %c <  "
+set index_format="%Z %{$my_date_format} %-20.20n (%?l?%4l&%4c?) %s"
+set status_chars="-*%A"
+set status_format=" %r$my_profile%r > %f >%?u? %u(%n+%o)?%?d? -%d?%?p? ^%p?%?t? *%t? > %>  < %s/%S < %P %?M?%M/?%m <  "
+
+# Change the major colour scheme to blue to differentiate it.
+color status        color46         color235
+color indicator     brightcolor46   default
+# Include my default colour scheme. Accents (status and indicator) will be
+# overridden by the individual muttrc-$box configurations.
+source $HOME/.mutt/muttrc-colours
