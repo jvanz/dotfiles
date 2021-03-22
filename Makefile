@@ -90,7 +90,7 @@ gnome-config:
 	# Configure gnome
 	gsettings set org.gnome.shell.app-switcher current-workspace-only true
 
-config: bash-config git gnome-config
+config: bash-config git-config gnome-config
 
 clean-rsync:
 	rm -f ~/.config/systemd/user/$(RSYNC_SERVICE_NAME).service
