@@ -1,6 +1,6 @@
 
 " Plugins...
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.config/nvim/plugged')
 Plug 'kristijanhusak/vim-hybrid-material'
 Plug 'mhinz/vim-signify'
 Plug 'vim-airline/vim-airline'
@@ -11,16 +11,19 @@ Plug 'scrooloose/nerdtree'
 Plug 'farmergreg/vim-lastplace'
 Plug 'tpope/vim-surround'
 Plug 'kien/ctrlp.vim'
-Plug 'fatih/vim-go'
 Plug 'stfl/meson.vim'
-Plug 'saltstack/salt-vim'
 " snippets
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+
+" Programming languages plugins
 Plug 'rust-lang/rust.vim'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " latex
 Plug 'lervag/vimtex'
-
+Plug 'aliou/bats.vim'
+" Python folding
+Plug 'tmhedberg/SimpylFold'
 
 "color schemes
 Plug 'tyrannicaltoucan/vim-quantum'
@@ -44,6 +47,7 @@ set shiftwidth=8
 set noexpandtab
 set clipboard+=unnamed
 set nocscopeverbose
+set backspace=2
 "indent"
 filetype indent on
 filetype plugin on
@@ -127,10 +131,7 @@ nnoremap <leader>f  :Vex<CR>
 "folding
 set foldmethod=syntax
 set foldlevelstart=1
-set foldnestmax=2
-let javaScript_fold=1
-let sh_fold_enabled=1
-let c_fold_enabled=1
+set foldnestmax=4
 
 augroup filetype_html
 	autocmd!
@@ -144,7 +145,7 @@ au BufRead COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 
 " Remove all trailing whitespace when saving
 " See http://vim.wikia.com/wiki/Remove_unwanted_spaces
-autocmd FileType c,cpp,javascript,python,sql,text autocmd BufWritePre * :%s/\s\+$//e
+autocmd FileType c,cpp,javascript,python,sql,text,yaml,markdown,rust autocmd BufWritePre * :%s/\s\+$//e
 
 " toggle invisible characters
 set invlist
@@ -182,6 +183,8 @@ let g:airline_theme='quantum'
 "vim-go
 "disable warning in older Vim version
 let g:go_version_warning = 0
+"do not organize import on saving
+let g:go_imports_autosave = 0
 
 "vimade
 let g:vimade = {
@@ -195,8 +198,6 @@ let g:vimade = {
 
 " snippets
 let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
 
 "tex plugin

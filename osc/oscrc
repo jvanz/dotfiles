@@ -6,8 +6,8 @@ checkout_no_colon = 0
 [https://api.opensuse.org]
 keyring=1
 user=jguilhermevanz
-trusted_prj=openSUSE:Factory
 credentials_mgr_class=osc.credentials.KeyringCredentialsManager:keyring.backends.SecretService.Keyring
+trusted_prj=SUSE:SLE-15-SP1:Update SUSE:SLE-15-SP1:GA
 
 [https://api.suse.de]
 keyring=1

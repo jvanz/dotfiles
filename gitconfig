@@ -15,9 +15,14 @@
 	st = status
 	cms = commit -s
 	co = checkout
+	coa = commit --amend --no-edit
+	sw = switch
 
 [pager]
 	branch = false
 	show = false
+	tag = false
 [gpg]
 	program = gpg2
+[tag]
+	gpgSign = true

@@ -1,1 +1,0 @@
-/home/yocto/bin/extras/vim/pythonx/zpe.py

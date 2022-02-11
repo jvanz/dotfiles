@@ -8,10 +8,11 @@ alias ...="cd ../.."
 alias clipboard='xclip -sel clip'
 alias osc='osc -A opensuse'
 alias iosc='osc -A https://api.suse.de'
+alias k8s='kubectl'
 
 export MAINTAINER="jvanz@jvanz.com"
 export MALLOC_PERTURB_=$(($RANDOM % 255 + 1))
-export EDITOR="vim"
+export EDITOR="nvim"
 export GYP_GENERATORS=ninja
 export GOPATH=$HOME/go
 
