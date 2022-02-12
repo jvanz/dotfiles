@@ -4,6 +4,7 @@ Documentation={{DOCUMENTATION}}
 
 [Service]
 Type=oneshot
+{{ENVIRONMENT}}
 ExecStart={{EXECSTART}}
 
 [Install]

@@ -6,19 +6,23 @@ EMAIL := jvanz@jvanz.com
 SIGKEY := 4159E08B20565EF1
 GIT_SUSE_CONFIG := $(HOME)/.gitconfig_suse
 
+REPOSITORIES_HOME ?= $(HOME)/repositories
+
+SERVICE_NAME=sync_brain
+SYSTEMD_SERVICE_FILE_DIR ?= $(HOME)/.config/systemd/user
+
 all: install reconfigure
 
 reconfigure: uninstall create-user-systemd-dir links config 
 
 uninstall: 
-	rm -f ~/.tmux.conf
-	rm -f ~/$(GIT_USER_CONFIG)
+	rm -f ~/.tmux.conf rm -f ~/$(GIT_USER_CONFIG)
 	rm -f ~/.gitconfig
 	rm -f ~/.config/osc
 	rm -f ~/.zshrc
 	rm -f ~/.zsh
 
-install: 
+zypper-packages:
 	sudo zypper install -y \
 		anki \
 		autoconf \
@@ -57,8 +61,16 @@ install:
 		virt-install \
 		wget \
 		zsh
-	
+
+python-packages:
 	pip3 install --user meson
+
+.PHONY: flatpak-apps
+flatpak-apps:
+	flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+	flatpak install --user --app -y Obsidian Zotero Discord Todoist Slack
+
+install: zypper-packages python-packages flatpak-apps
 
 links:
 	ln -s -f $(PWD)/tmux.conf $(HOME)/.tmux.conf
@@ -91,3 +103,28 @@ systemd-reload-daemon:
 create-user-systemd-dir:
 	mkdir -p  ~/.config/systemd/user
 
+.PHONY: clean-brain-sync-service
+clean-brain-sync-service: 
+	- rm $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
+	- rm $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
+
+.PHONY: brain-sync-service
+brain-sync-service: clean-brain-sync-service
+	cp $(PWD)/oneshoot-service.service $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
+	sed -i "s/{{DESCRIPTION}}/Sync brain repository/" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
+	sed -i "s/{{DOCUMENTATION}}//" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
+	sed -i "s;{{WANTEDBY}};default.target;" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
+	sed -i "s;{{ENVIRONMENT}};Environment=\"REPOSITORY_PATH=$(REPOSITORIES_HOME)/brain\";" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
+	sed -i "s;{{EXECSTART}}; $(HOME)/.local/bin/repository_sync;" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
+	cp $(PWD)/oneshoot-service.timer $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
+	sed -i "s/{{DESCRIPTION}}/Sync brain repository timer/" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
+	sed -i "s;{{ONBOOTSEC}};10m;" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
+	sed -i "s;{{ONCALENDAR}};hourly;" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
+	sed -i "s;{{UNIT}};$(SERVICE_NAME).service;" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
+	sed -i "s/{{WANTEDBY}}/default.target/" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
+	systemctl --user enable $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
+	systemctl --user start $(SERVICE_NAME).timer
+
+.PHONY: brain
+brain: brain-sync-service systemd-reload-daemon
+	git clone git@github.com:jvanz/brain.git $(REPOSITORIES_HOME)/brain
