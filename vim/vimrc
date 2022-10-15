@@ -138,9 +138,6 @@ augroup filetype_html
 	autocmd FileType html nnoremap <buffer> <localleader>f Vatzf
 augroup END
 
-"Abbreviations
-iabbrev ssig Thanks!<cr>Vanz
-
 au BufRead COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 
 " Remove all trailing whitespace when saving
@@ -154,6 +151,10 @@ highlight SpecialKey ctermbg=none
 set showbreak=↪
 nmap <leader>ll :set list!<cr>
 
+" load file changed outside vim
+set autoread
+autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * :checktime
+
 if has('termguicolors')
 	set termguicolors
 endif
@@ -166,6 +167,7 @@ let g:signify_vcs_list = [ 'git', 'hg', 'svn' ]
 
 "ctrlp plugin config
 let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_custom_ignore = { 'file':  '\v\.(pdf|txt)$', }
 
 "vim-multiples-cursors
 let g:multi_cursor_prev_key='<C-b>'
@@ -173,6 +175,12 @@ let g:multi_cursor_next_key='<C-m>'
 
 "Toggle NERDTree plugin
 nmap <leader>n :NERDTreeToggle<CR>
+" Start NERDTree and put the cursor back in the other window.
+autocmd VimEnter * NERDTree | wincmd p
+"Open NERDTree on all new tab
+autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
+" Close the tab if NERDTree is the only window remaining in it.
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 "NERDTree ignore file types
 let NERDTreeIgnore = ['\.pyc$']
 

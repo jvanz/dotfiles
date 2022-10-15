@@ -5,22 +5,19 @@ USERNAME := José Guilherme Vanz
 EMAIL := jvanz@jvanz.com
 SIGKEY := 4159E08B20565EF1
 GIT_SUSE_CONFIG := $(HOME)/.gitconfig_suse
-
-REPOSITORIES_HOME ?= $(HOME)/repositories
+BACKUP_DIR ?= $(PWD)/backup
 
 SERVICE_NAME=sync_brain
 SYSTEMD_SERVICE_FILE_DIR ?= $(HOME)/.config/systemd/user
 
 all: install reconfigure
 
-reconfigure: uninstall create-user-systemd-dir links config 
+reconfigure: uninstall create-user-systemd-dir links config
 
 uninstall: 
 	rm -f ~/.tmux.conf rm -f ~/$(GIT_USER_CONFIG)
 	rm -f ~/.gitconfig
 	rm -f ~/.config/osc
-	rm -f ~/.zshrc
-	rm -f ~/.zsh
 
 zypper-packages:
 	sudo zypper install -y \
@@ -40,9 +37,9 @@ zypper-packages:
 		git-email \
 		go \
 		golang-packaging \
+		helm \
 		jq \
 		make \
-		meson \
 		neovim \
 		ninja \
 		osc \
@@ -53,7 +50,6 @@ zypper-packages:
 		quilt \
 		secret-tool \
 		strace \
-		texlive-dvisvgm \
 		tmux \
 		unzip \
 		valgrind \
@@ -62,21 +58,27 @@ zypper-packages:
 		wget \
 		zsh
 
-python-packages:
-	pip3 install --user meson
-
 .PHONY: flatpak-apps
 flatpak-apps:
 	flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 	flatpak install --user --app -y Obsidian Zotero Discord Todoist Slack
 
-install: zypper-packages python-packages flatpak-apps
+.PHONY: install-k3d
+install-k3d:
+	curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh -o /tmp/k3dinstall.sh
+	chmod +x /tmp/k3dinstall.sh
+	USE_SUDO="false" K3D_INSTALL_DIR="$HOME/.local/bin" /tmp/k3dinstall.sh
+	rm /tmp/k3dinstall.sh
+
+.PHONY: install-others
+install-others: install-k3d
+
+install: zypper-packages flatpak-apps install-others
 
 links:
 	ln -s -f $(PWD)/tmux.conf $(HOME)/.tmux.conf
 	ln -s -f $(PWD)/gitconfig $(HOME)/.gitconfig
 	ln -s -f $(PWD)/osc ~/.config/osc
-	ln -s -f $(PWD)/zshrc ~/.zshrc
 	ln -s -f $(PWD)/vim ~/.config/nvim
 
 git-config: 
@@ -96,7 +98,6 @@ gnome-config:
 
 config: bash-config git-config gnome-config
 
-
 systemd-reload-daemon:
 	systemctl --user daemon-reload
 
@@ -107,15 +108,18 @@ create-user-systemd-dir:
 clean-brain-sync-service: 
 	- rm $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
 	- rm $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
+	- rm $(HOME)/.local/bin/repository_sync.sh
 
 .PHONY: brain-sync-service
 brain-sync-service: clean-brain-sync-service
+	mkdir -p $(HOME)/.local/bin
+	cp $(PWD)/scripts/repository_sync.sh $(HOME)/.local/bin
 	cp $(PWD)/oneshoot-service.service $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
 	sed -i "s/{{DESCRIPTION}}/Sync brain repository/" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
 	sed -i "s/{{DOCUMENTATION}}//" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
 	sed -i "s;{{WANTEDBY}};default.target;" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
-	sed -i "s;{{ENVIRONMENT}};Environment=\"REPOSITORY_PATH=$(REPOSITORIES_HOME)/brain\";" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
-	sed -i "s;{{EXECSTART}}; $(HOME)/.local/bin/repository_sync;" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
+	sed -i "s;{{ENVIRONMENT}};Environment=\"REPOSITORY_PATH=$(HOME)/brain\";" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
+	sed -i "s;{{EXECSTART}}; $(HOME)/.local/bin/repository_sync.sh;" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
 	cp $(PWD)/oneshoot-service.timer $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
 	sed -i "s/{{DESCRIPTION}}/Sync brain repository timer/" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
 	sed -i "s;{{ONBOOTSEC}};10m;" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
@@ -127,4 +131,10 @@ brain-sync-service: clean-brain-sync-service
 
 .PHONY: brain
 brain: brain-sync-service systemd-reload-daemon
-	git clone git@github.com:jvanz/brain.git $(REPOSITORIES_HOME)/brain
+	git clone git@github.com:jvanz/brain.git $(HOME)/brain
+
+.PHONY: restore-backup
+restore-backup:
+	cp $(BACKUP_DIR)/ssh/config $(HOME)/.ssh/config
+	cp $(BACKUP_DIR)/ssh/id_rsa* $(HOME)/.ssh/
+	chmod 600 $(HOME)/.ssh/id_rsa*
