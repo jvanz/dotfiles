@@ -58,7 +58,7 @@ zypper-packages:
 .PHONY: flatpak-apps
 flatpak-apps:
 	flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-	flatpak install --user --app -y Obsidian Zotero com.discordapp.Discord Slack
+	flatpak install --user --app -y Obsidian Zotero com.discordapp.Discord Slack com.dropbox.Client
 
 .PHONY: install-others
 install-others: 
