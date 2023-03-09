@@ -113,8 +113,6 @@ alias myip="curl http://ipecho.net/plain; echo"
 alias ..="cd .."
 alias ...="cd ../.."
 alias clipboard='xclip -sel clip'
-alias osc='osc -A https://api.opensuse.org'
-alias iosc='osc -A https://api.suse.de'
 alias vim='nvim'
 alias k8s='kubectl'
 
@@ -124,19 +122,4 @@ POWERLEVEL9K_DISABLE_RPROMPT=true
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/jvanz/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/jvanz/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/jvanz/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/jvanz/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
 

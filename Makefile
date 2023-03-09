@@ -12,7 +12,7 @@ SYSTEMD_SERVICE_FILE_DIR ?= $(HOME)/.config/systemd/user
 
 all: install reconfigure
 
-reconfigure: uninstall create-user-systemd-dir links config
+reconfigure: uninstall links config
 
 uninstall: 
 	rm -f ~/.tmux.conf rm -f ~/$(GIT_USER_CONFIG)
@@ -44,9 +44,6 @@ zypper-packages:
 		ninja \
 		osc \
 		podman \
-		python-pip \
-		python3-docker-compose \
-		python3-pip \
 		quilt \
 		secret-tool \
 		strace \
@@ -61,25 +58,34 @@ zypper-packages:
 .PHONY: flatpak-apps
 flatpak-apps:
 	flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-	flatpak install --user --app -y Obsidian Zotero Discord Todoist Slack
-
-.PHONY: install-k3d
-install-k3d:
-	curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh -o /tmp/k3dinstall.sh
-	chmod +x /tmp/k3dinstall.sh
-	USE_SUDO="false" K3D_INSTALL_DIR="$HOME/.local/bin" /tmp/k3dinstall.sh
-	rm /tmp/k3dinstall.sh
+	flatpak install --user --app -y Obsidian Zotero com.discordapp.Discord Slack
 
 .PHONY: install-others
-install-others: install-k3d
+install-others: 
+	pip3 install --user yq
 
 install: zypper-packages flatpak-apps install-others
+
+.PHONY: oh-my-zsh
+oh-my-zsh:
+	curl -fsSL --output /tmp/zsh-install.sh  https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+	chmod +x /tmp/zsh-install.sh
+	- rm -rf $(HOME)/.oh-my-zsh
+	- rm -rf $(HOME)/.zshrc*
+	/tmp/zsh-install.sh --keep-zshrc
+	
+.PHONY: oh-my-zsh-plugins
+oh-my-zsh-plugins:
+	echo "Installing zsh plugins"
+	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $(HOME)/.oh-my-zsh/custom/themes/powerlevel10k
+	git clone https://github.com/zsh-users/zsh-autosuggestions $(HOME)/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 
 links:
 	ln -s -f $(PWD)/tmux.conf $(HOME)/.tmux.conf
 	ln -s -f $(PWD)/gitconfig $(HOME)/.gitconfig
 	ln -s -f $(PWD)/osc ~/.config/osc
 	ln -s -f $(PWD)/vim ~/.config/nvim
+	ln -s -f $(PWD)/zshrc ~/.zshrc
 
 git-config: 
 	# Configure git
@@ -98,43 +104,7 @@ gnome-config:
 
 config: bash-config git-config gnome-config
 
-systemd-reload-daemon:
-	systemctl --user daemon-reload
-
-create-user-systemd-dir:
-	mkdir -p  ~/.config/systemd/user
-
-.PHONY: clean-brain-sync-service
-clean-brain-sync-service: 
-	- rm $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
-	- rm $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
-	- rm $(HOME)/.local/bin/repository_sync.sh
-
-.PHONY: brain-sync-service
-brain-sync-service: clean-brain-sync-service
-	mkdir -p $(HOME)/.local/bin
-	cp $(PWD)/scripts/repository_sync.sh $(HOME)/.local/bin
-	cp $(PWD)/oneshoot-service.service $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
-	sed -i "s/{{DESCRIPTION}}/Sync brain repository/" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
-	sed -i "s/{{DOCUMENTATION}}//" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
-	sed -i "s;{{WANTEDBY}};default.target;" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
-	sed -i "s;{{ENVIRONMENT}};Environment=\"REPOSITORY_PATH=$(HOME)/brain\";" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
-	sed -i "s;{{EXECSTART}}; $(HOME)/.local/bin/repository_sync.sh;" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).service
-	cp $(PWD)/oneshoot-service.timer $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
-	sed -i "s/{{DESCRIPTION}}/Sync brain repository timer/" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
-	sed -i "s;{{ONBOOTSEC}};10m;" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
-	sed -i "s;{{ONCALENDAR}};hourly;" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
-	sed -i "s;{{UNIT}};$(SERVICE_NAME).service;" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
-	sed -i "s/{{WANTEDBY}}/default.target/" $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
-	systemctl --user enable $(SYSTEMD_SERVICE_FILE_DIR)/$(SERVICE_NAME).timer
-	systemctl --user start $(SERVICE_NAME).timer
-
-.PHONY: brain
-brain: brain-sync-service systemd-reload-daemon
-	git clone git@github.com:jvanz/brain.git $(HOME)/brain
-
 .PHONY: restore-backup
 restore-backup:
-	cp $(BACKUP_DIR)/ssh/config $(HOME)/.ssh/config
-	cp $(BACKUP_DIR)/ssh/id_rsa* $(HOME)/.ssh/
+	cp $(BACKUP_DIR)/ssh/* $(HOME)/.ssh/
 	chmod 600 $(HOME)/.ssh/id_rsa*
