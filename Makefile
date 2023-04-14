@@ -13,6 +13,7 @@ SYSTEMD_SERVICE_FILE_DIR ?= $(HOME)/.config/systemd/user
 all: install reconfigure
 
 reconfigure: uninstall links config
+	sudo gpasswd -a $(USER) docker
 
 uninstall: 
 	rm -f ~/.tmux.conf rm -f ~/$(GIT_USER_CONFIG)
@@ -28,6 +29,7 @@ zypper-packages:
 		ctags \
 		curl \
 		deja-dup \
+		docker \
 		doxygen \
 		flatpak \
 		gcc \
@@ -39,6 +41,7 @@ zypper-packages:
 		golang-packaging \
 		helm \
 		jq \
+		k9s \
 		make \
 		neovim \
 		ninja \
@@ -58,7 +61,13 @@ zypper-packages:
 .PHONY: flatpak-apps
 flatpak-apps:
 	flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-	flatpak install --user --app -y Obsidian Zotero com.discordapp.Discord Slack com.dropbox.Client
+	flatpak install --user --app -y Obsidian \
+		Zotero \
+		com.discordapp.Discord \
+		Slack \
+		com.dropbox.Client \
+		com.brave.Browser \
+		org.chromium.Chromium
 
 .PHONY: install-others
 install-others: 
@@ -79,6 +88,13 @@ oh-my-zsh-plugins:
 	echo "Installing zsh plugins"
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $(HOME)/.oh-my-zsh/custom/themes/powerlevel10k
 	git clone https://github.com/zsh-users/zsh-autosuggestions $(HOME)/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+
+.PHONY: rust
+rust:
+	curl --proto '=https' --tlsv1.2 -sSf --output /tmp/rustup.sh https://sh.rustup.rs
+	chmod +x /tmp/rustup.sh
+	/tmp/rustup.sh -y
+	cargo install cargo-generate
 
 links:
 	ln -s -f $(PWD)/tmux.conf $(HOME)/.tmux.conf
@@ -108,3 +124,4 @@ config: bash-config git-config gnome-config
 restore-backup:
 	cp $(BACKUP_DIR)/ssh/* $(HOME)/.ssh/
 	chmod 600 $(HOME)/.ssh/id_rsa*
+
