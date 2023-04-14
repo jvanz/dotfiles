@@ -183,6 +183,7 @@ autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
 autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 "NERDTree ignore file types
 let NERDTreeIgnore = ['\.pyc$']
+let NERDTreeShowBookmarks=1
 
 "airline plugin
 let g:airline_powerline_fonts=1
