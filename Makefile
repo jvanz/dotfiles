@@ -14,6 +14,7 @@ all: install reconfigure
 
 reconfigure: uninstall links config
 	sudo gpasswd -a $(USER) docker
+	sudo usermod -a -G libvirt $(USER)
 
 uninstall: 
 	rm -f ~/.tmux.conf rm -f ~/$(GIT_USER_CONFIG)
@@ -42,6 +43,7 @@ zypper-packages:
 		helm \
 		jq \
 		k9s \
+		libvirt-client \
 		make \
 		neovim \
 		ninja \

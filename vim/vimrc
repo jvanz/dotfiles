@@ -19,6 +19,7 @@ Plug 'honza/vim-snippets'
 " Programming languages plugins
 Plug 'rust-lang/rust.vim'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'keith/swift.vim'
 " latex
 Plug 'lervag/vimtex'
 Plug 'aliou/bats.vim'
@@ -57,6 +58,8 @@ set path+=**
 "display all matching file when we tab complete
 set wildmenu
 set spell
+"keep 10 lines above/below the cursor when moving
+set scrolloff=10
 
 if version >= 703
 	" Keep undo history between sessions
