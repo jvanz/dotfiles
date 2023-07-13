@@ -86,6 +86,8 @@ if &term != "xterm" && exists('+colorcolumn')
 	let &colorcolumn="80,".join(range(120,999),",")
 endif
 
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+
 "highlighting line number"
 set cursorline
 
