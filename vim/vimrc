@@ -12,6 +12,7 @@ Plug 'farmergreg/vim-lastplace'
 Plug 'tpope/vim-surround'
 Plug 'kien/ctrlp.vim'
 Plug 'stfl/meson.vim'
+Plug 'ruanyl/vim-gh-line'
 " snippets
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -79,6 +80,7 @@ catch
 	colorscheme default
 endtry
 
+nnoremap <space> <nop>
 let mapleader=" "
 let maplocalleader="\\"
 
