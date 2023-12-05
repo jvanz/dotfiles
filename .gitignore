@@ -1,3 +1,8 @@
 *.pyc
 vim/plugged
 backup
+gpgkeys.tar
+mypubkeys.asc
+myprivatekeys.asc
+otrust.txt
+ssh

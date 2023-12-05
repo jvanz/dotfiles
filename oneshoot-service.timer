@@ -1,9 +1,0 @@
-[Unit]
-Description={{DESCRIPTION}}
-
-[Timer]
-OnCalendar={{ONCALENDAR}}
-Unit={{UNIT}}
-
-[Install]
-WantedBy={{WANTEDBY}}

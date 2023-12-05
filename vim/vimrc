@@ -7,12 +7,15 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-fugitive'
 Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/nerdtree'
+"Plug 'scrooloose/nerdtree'
+" file explorer
+Plug 'nvim-tree/nvim-tree.lua'
 Plug 'farmergreg/vim-lastplace'
 Plug 'tpope/vim-surround'
 Plug 'kien/ctrlp.vim'
 Plug 'stfl/meson.vim'
 Plug 'ruanyl/vim-gh-line'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " snippets
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -48,7 +51,6 @@ set tabstop=8
 set shiftwidth=8
 set noexpandtab
 set clipboard+=unnamed
-set nocscopeverbose
 set backspace=2
 "indent"
 filetype indent on
@@ -180,18 +182,6 @@ let g:ctrlp_custom_ignore = { 'file':  '\v\.(pdf|txt)$', }
 let g:multi_cursor_prev_key='<C-b>'
 let g:multi_cursor_next_key='<C-m>'
 
-"Toggle NERDTree plugin
-nmap <leader>n :NERDTreeToggle<CR>
-" Start NERDTree and put the cursor back in the other window.
-autocmd VimEnter * NERDTree | wincmd p
-"Open NERDTree on all new tab
-autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
-" Close the tab if NERDTree is the only window remaining in it.
-autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-"NERDTree ignore file types
-let NERDTreeIgnore = ['\.pyc$']
-let NERDTreeShowBookmarks=1
-
 "airline plugin
 let g:airline_powerline_fonts=1
 let g:airline_theme='quantum'
@@ -213,8 +203,25 @@ let g:vimade = {
   \ "checkinterval": 32 }
 
 " snippets
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsEditSplit="vertical"
+" let g:UltiSnipsExpandTrigger="<tab>"
+" let g:UltiSnipsEditSplit="vertical"
 
 "tex plugin
 let g:tex_flavor = 'latex'  
+
+let g:loaded_netrw       = 1
+let g:loaded_netrwPlugin = 1
+
+"coc
+" Some of this configuration is copied from https://github.com/neoclide/coc.nvim/
+let g:coc_disable_startup_warning = 1
+" GoTo code navigation
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Remap keys for applying refactor code actions
+nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
+xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
