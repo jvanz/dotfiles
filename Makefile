@@ -112,7 +112,10 @@ links:
 	ln -s -f $(PWD)/gitconfig $(HOME)/.gitconfig
 	ln -s -f $(PWD)/zshrc ~/.zshrc
 
-$(BIN_DIR)/nvim:
+$(BIN_DIR):
+	mkdir $@
+	
+$(BIN_DIR)/nvim: $(BIN_DIR)
 	curl -L -o /tmp/nvim.appimage https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
 	chmod u+x /tmp/nvim.appimage
 	cp /tmp/nvim.appimage $@
