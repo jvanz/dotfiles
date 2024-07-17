@@ -40,6 +40,7 @@ zypper-packages:
 		git-email \
 		go \
 		golang-packaging \
+		gnome-pomodoro \
 		helm \
 		jq \
 		k9s \
@@ -76,7 +77,11 @@ flatpak-apps:
 install-others: 
 	pip3 install --user yq pynvim
 
-install: zypper-packages flatpak-apps vim install-others
+minikube:
+	curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+	install minikube-linux-amd64 $(HOME)/.local/bin/minikube
+
+install: zypper-packages flatpak-apps vim minikube install-others
 
 install-oh-my-zsh:
 	curl -fsSL --output /tmp/zsh-install.sh  https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
