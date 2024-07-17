@@ -11,8 +11,6 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Example using a list of specs with the default options
-vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappings are correct
 
 require("lazy").setup({
 	'nvim-tree/nvim-tree.lua',
@@ -36,9 +34,24 @@ require("lazy").setup({
 	-- install jsregexp (optional!).
 	build = "make install_jsregexp"
 	},
-	"saadparwaiz1/cmp_luasnip"
+	"saadparwaiz1/cmp_luasnip",
+	{
+	    'numToStr/Comment.nvim',
+	    opts = {
+		-- add any options here
+	    },
+	    lazy = false,
+	},
+	"cappyzawa/starlark.vim",
+	"github/copilot.vim",
+	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+	{"nvim-lualine/lualine.nvim", dependencies =  'nvim-tree/nvim-web-devicons' },
+	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
+	{'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons'}
 })
-
+--
+-- Example using a list of specs with the default options
+vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappings are correct
 
 vim.opt.guicursor = ""
 vim.opt.compatible = false
@@ -53,14 +66,14 @@ vim.opt.expandtab = false
 --highlighting line number
 vim.opt.cursorline = true
 vim.opt.foldmethod= 'syntax'
-vim.opt.foldlevelstart=1
+vim.opt.foldlevelstart=4
 vim.opt.foldnestmax=6
 --"keep 10 lines above/below the cursor when moving
 vim.opt.scrolloff=8
 --"display all matching file when we tab complete
 vim.opt.wildmenu=true 
 vim.opt.spell = true
-vim.opt.colorcolumn = "80"
+vim.opt.colorcolumn = "80,120"
 -- disable mouse
 vim.opt.mouse = ""
 vim.opt.signcolumn = "yes"
@@ -68,11 +81,16 @@ vim.opt.signcolumn = "yes"
 vim.cmd("filetype indent on")
 vim.cmd("filetype plugin on")
 
-vim.cmd.colorscheme('quantum')
+vim.cmd.colorscheme('catppuccin-frappe')
 -- set termguicolors to enable highlight groups
 vim.opt.termguicolors = true
 
 vim.cmd('syntax enable')
+
+--make vim save and load the folding of the document each time it loads
+--also places the cursor in the last place that it was left.
+vim.cmd("autocmd BufWinLeave * silent! mkview")
+vim.cmd("autocmd BufWinEnter * silent! loadview")
 
 --load file changed outside vim
 vim.opt.autoread = true
@@ -87,53 +105,6 @@ local function map(mode, combo, mapping, opts)
   vim.api.nvim_set_keymap(mode, combo, mapping, options)
 end
 
---disable Ex mode
-map('n', 'Q', '<NOP>', {noremap = true})
-map('n', '<space>', '<nop>', {noremap = true})
---Go to normal mode from insert mode
-map('i', 'jk', '<esc>', {noremap=true})
---Move the current line down
-map('', '-', 'dd _p')
---Close current tab
-map('n', 'tc', ':tabclose<cr>', {noremap=true})
---New tab
-map('n', 'tn', ':tabnew<cr>', {noremap=true})
---Go to next tab
-map('n', 'tj', ':tabnext<CR>', {noremap=true})
---Go to previous tab
-map('n', 'tk', ':tabprev<CR>', {noremap=true})
-----Go to normal mode from insert mode
-map('i','jk', '<esc>',  {noremap=true})
---Go to left window
-map('n', '<leader>h', ':wincmd h<CR>', {noremap=true})
---Go to right window
-map('n', '<leader>l', ':wincmd l<CR>', {noremap =true})
---Go to top window
-map('n', '<leader>j', ':wincmd j<CR>', {noremap =true})
---Go to bottom window
-map('n','<leader>k', ':wincmd k<CR>', {noremap = true})
---Disable esc key
-map('i', '<esc>', '<nop>',  {noremap = true})
-----Disable arrows keys! Use vim correctly
-map('n', '<Up>',    '<nop>', {noremap=true})
-map('n', '<Down>',  '<nop>', {noremap=true})
-map('n', '<Left>',  '<nop>', {noremap=true})
-map('n', '<Right>', '<nop>', {noremap=true})
--- Horizontal nav'igation shortcut
---Move 20 characters to the right
-map('n', '<C-l>', '20zl', {noremap=true})
---Move 20 characters to the left
-map('n', '<C-h>', '20zh', {noremap=true})
--- Copy to clipboard
-map('v', '<leader>y', '"+y', {noremap=true})
-map('n', '<leader>Y', '"+yg_', {noremap=true})
-map('n', '<leader>y', '"+y', {noremap=true})
-map('n', '<leader>yy','"+yy', {noremap=true})
--- Paste from clipboard
-map('n', '<leader>p', '"+p', {noremap=true})
-map('n', '<leader>P', '"+P', {noremap=true})
-map('v', '<leader>p', '"+p', {noremap=true})
-map('v', '<leader>P', '"+P', {noremap=true})
 
 
 -- NVIM TREE PLUGIN SETTINGS --
@@ -142,14 +113,11 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
 
--- empty setup using defaults
-require("nvim-tree").setup()
-
 -- OR setup with some options
 require("nvim-tree").setup({
   sort_by = "case_sensitive",
   view = {
-    width = 30,
+    width = 40,
   },
   update_focused_file = {
     enable = true,
@@ -166,22 +134,10 @@ require("nvim-tree").setup({
       close = true,
     },
   },
+  diagnostics = {
+	  enable = true,
+  },
 })
-
-local function open_nvim_tree(data)
-  -- buffer is a real file on the disk
-  local real_file = vim.fn.filereadable(data.file) == 1
-  -- buffer is a [No Name]
-  local no_name = data.file == "" and vim.bo[data.buf].buftype == ""
-  if not real_file and not no_name then
-    return
-  end
-
-  -- open the tree, find the file but don't focus it
-  require("nvim-tree.api").tree.toggle({ focus = false, find_file = true, })
-end
-
-vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
 
 local cmp = require("cmp")
 
@@ -216,10 +172,15 @@ require("lspconfig").rust_analyzer.setup { capabilities = capabilities, }
 require("lspconfig").gopls.setup { capabilities = capabilities, }
 require("lspconfig").pyright.setup { capabilities = capabilities, }
 
+require('lualine').setup()
+require('bufferline').setup()
+require("ibl").setup()
+
 -- TELESCOPE PLUGIN --
 local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
 vim.keymap.set('n', '<leader>fg', builtin.git_files, {})
+vim.keymap.set('n', '<leader>fs', builtin.live_grep, {})
 
 -- LSP --
 vim.api.nvim_create_autocmd('LspAttach', {
@@ -232,20 +193,63 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.keymap.set("n", "gi", function() vim.lsp.buf.implementation() end, opts)
 		vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
 		vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
-		vim.keymap.set("n", "<leader>q", function() vim.cmd("ccl") end, opts)
-		vim.keymap.set("n", "<leader>qs", function() vim.cmd("pc") end, opts)
-
-		vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
-		vim.keymap.set("n", "<leader>[", function() vim.diagnostic.goto_next() end, opts)
-		vim.keymap.set("n", "<leader>]", function() vim.diagnostic.goto_prev() end, opts)
 
 		vim.keymap.set("n", "gr", function() require("trouble").toggle("lsp_references") end)
-
+		vim.keymap.set("n", "<leader>td", function() require("trouble").toggle("document_diagnostics") end)
+		vim.keymap.set("n", "<leader>tw", function() require("trouble").toggle("workspace_diagnostics") end)
+		vim.keymap.set("n", "<leader>tr", function() require("trouble").toggle("lsp_references") end)
+		vim.keymap.set("n", "<leader>tf", function() require("trouble").toggle("lsp_definitions") end)
+		vim.keymap.set("n", "<leader>tq", function() require("trouble").toggle("quickfix") end)
+		vim.keymap.set("n", "<leader>tl", function() require("trouble").toggle("loclist") end)
 	end,
 })
 
-vim.keymap.set("n", "<leader>tx", function() require("trouble").toggle() end)
-vim.keymap.set("n", "<leader>tw", function() require("trouble").toggle("workspace_diagnostics") end)
-vim.keymap.set("n", "<leader>td", function() require("trouble").toggle("document_diagnostics") end)
-vim.keymap.set("n", "<leader>tq", function() require("trouble").toggle("quickfix") end)
-vim.keymap.set("n", "<leader>tl", function() require("trouble").toggle("loclist") end)
+vim.keymap.set("n", "<leader>tt", function() require("trouble").toggle() end)
+
+--disable Ex mode
+map('n', 'Q', '<NOP>', {noremap = true})
+map('n', '<space>', '<nop>', {noremap = true})
+--Go to normal mode from insert mode
+map('i', 'jk', '<esc>', {noremap=true})
+--Move the current line down
+map('', '-', 'dd _p')
+--Close current tab
+map('n', 'tc', ':tabclose<cr>', {noremap=true})
+--New tab
+map('n', 'tn', ':tabnew<cr>', {noremap=true})
+--Go to next tab
+map('n', 'tj', ':tabnext<CR>', {noremap=true})
+--Go to previous tab
+map('n', 'tk', ':tabprev<CR>', {noremap=true})
+--Go to left window
+map('n', '<leader>h', ':wincmd h<CR>', {noremap=true})
+--Go to right window
+map('n', '<leader>l', ':wincmd l<CR>', {noremap =true})
+--Go to top window
+map('n', '<leader>j', ':wincmd j<CR>', {noremap =true})
+--Go to bottom window
+map('n','<leader>k', ':wincmd k<CR>', {noremap = true})
+--Disable esc key
+map('i', '<esc>', '<nop>',  {noremap = true})
+----Disable arrows keys! Use vim correctly
+map('n', '<Up>',    '<nop>', {noremap=true})
+map('n', '<Down>',  '<nop>', {noremap=true})
+map('n', '<Left>',  '<nop>', {noremap=true})
+map('n', '<Right>', '<nop>', {noremap=true})
+-- Horizontal nav'igation shortcut
+--Move 20 characters to the right
+map('n', '<C-l>', '20zl', {noremap=true})
+--Move 20 characters to the left
+map('n', '<C-h>', '20zh', {noremap=true})
+-- Copy to clipboard
+map('v', '<leader>y', '"+y', {noremap=true})
+map('n', '<leader>Y', '"+yg_', {noremap=true})
+map('n', '<leader>y', '"+y', {noremap=true})
+map('n', '<leader>yy','"+yy', {noremap=true})
+-- Paste from clipboard
+map('n', '<leader>p', '"+p', {noremap=true})
+map('n', '<leader>P', '"+P', {noremap=true})
+map('v', '<leader>p', '"+p', {noremap=true})
+map('v', '<leader>P', '"+P', {noremap=true})
+-- shortcut to file explorer
+map('n', '<leader>e', ':NvimTreeToggle<CR>', {noremap=true})
