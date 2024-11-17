@@ -19,35 +19,37 @@ require("lazy").setup({
 	'williamboman/mason-lspconfig.nvim',
 	'neovim/nvim-lspconfig',
 	{
-		'nvim-telescope/telescope.nvim', tag = '0.1.2',
+		'nvim-telescope/telescope.nvim', tag = '0.1.8',
 		dependencies = { 'nvim-lua/plenary.nvim' }
 	},
 	{
 	 "folke/trouble.nvim", dependencies = { "nvim-tree/nvim-web-devicons" }, opts = { },
-	},
-	 "hrsh7th/nvim-cmp",
-	 "hrsh7th/cmp-nvim-lsp",
-	{
-	"L3MON4D3/LuaSnip",
-	-- follow latest release.
-	version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
-	-- install jsregexp (optional!).
-	build = "make install_jsregexp"
-	},
-	"saadparwaiz1/cmp_luasnip",
-	{
-	    'numToStr/Comment.nvim',
-	    opts = {
-		-- add any options here
-	    },
-	    lazy = false,
 	},
 	"cappyzawa/starlark.vim",
 	"github/copilot.vim",
 	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
 	{"nvim-lualine/lualine.nvim", dependencies =  'nvim-tree/nvim-web-devicons' },
 	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
-	{'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons'}
+	{'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons'},
+	{'hrsh7th/cmp-nvim-lsp'},
+	{'hrsh7th/nvim-cmp'},
+{
+	"L3MON4D3/LuaSnip",
+	-- follow latest release.
+	version = "v2.3.0", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+	-- install jsregexp (optional!).
+	build = "make install_jsregexp"
+},
+       {
+           'numToStr/Comment.nvim',
+           opts = {
+               -- add any options here
+           },
+           lazy = false,
+        },
+	'ahmedkhalf/project.nvim',
+
+
 })
 --
 -- Example using a list of specs with the default options
@@ -105,8 +107,6 @@ local function map(mode, combo, mapping, opts)
   vim.api.nvim_set_keymap(mode, combo, mapping, options)
 end
 
-
-
 -- NVIM TREE PLUGIN SETTINGS --
 -- disable netrw at the very start of your init.lua
 vim.g.loaded_netrw = 1
@@ -119,14 +119,11 @@ require("nvim-tree").setup({
   view = {
     width = 40,
   },
-  update_focused_file = {
-    enable = true,
-  },
   renderer = {
     group_empty = true,
   },
   filters = {
-    dotfiles = true,
+    dotfiles = false,
   },
   tab = {
     sync = {
@@ -137,33 +134,52 @@ require("nvim-tree").setup({
   diagnostics = {
 	  enable = true,
   },
+  sync_root_with_cwd = true,
+  respect_buf_cwd = true,
+  update_focused_file = {
+    enable = true,
+    update_root = true
+  },
 })
 
-local cmp = require("cmp")
+local projects = require("project_nvim").setup {
+-- your configuration comes here
+-- or leave it empty to use the default settings
+-- refer to the configuration section below
+  patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json", "=SUSE" },
+}
 
+local cmp = require('cmp')
 cmp.setup{
-	snippet = {
-		expand = function(args)
-			require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-		end,
-	},
-	mapping = cmp.mapping.preset.insert({
-		['<C-b>'] = cmp.mapping.scroll_docs(-4),
-		['<C-f>'] = cmp.mapping.scroll_docs(4),
-		['<C-Space>'] = cmp.mapping.complete(),
-		['<C-e>'] = cmp.mapping.abort(),
-		['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-	}),
+  snippet = {
+      -- REQUIRED - you must specify a snippet engine
+      expand = function(args)
+        require('luasnip').lsp_expand(args.body)
+      end,
+    },
+	    window = {
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
+    },
 	sources = cmp.config.sources({
-		{ name = 'nvim_lsp' },
-		{ name = 'luasnip' },
-	}),
+      { name = 'nvim_lsp' },
+      { name = 'luasnip' },
+    }, {
+      { name = 'buffer' },
+    }),
+  mapping = cmp.mapping.preset.insert({
+      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-Space>'] = cmp.mapping.complete(),
+      ['<C-e>'] = cmp.mapping.abort(),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    }),
 }
 
 -- LSP CONFIG --
 require("mason").setup()
 require("mason-lspconfig").setup {
-    ensure_installed = { "rust_analyzer", "pyright", "gopls" },
+    ensure_installed = { "rust_analyzer", "pyright", "gopls", "vale_ls" },
     automatic_installation = true,
 }
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -171,16 +187,21 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 require("lspconfig").rust_analyzer.setup { capabilities = capabilities, }
 require("lspconfig").gopls.setup { capabilities = capabilities, }
 require("lspconfig").pyright.setup { capabilities = capabilities, }
+require("lspconfig").vale_ls.setup { capabilities = capabilities, }
 
 require('lualine').setup()
 require('bufferline').setup()
 require("ibl").setup()
 
 -- TELESCOPE PLUGIN --
+require('telescope').setup {}
 local builtin = require('telescope.builtin')
+require('telescope').load_extension('projects')
+local extensions = require('telescope').extensions
+vim.keymap.set('n', '<leader>fs', builtin.lsp_dynamic_workspace_symbols, {})
 vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
 vim.keymap.set('n', '<leader>fg', builtin.git_files, {})
-vim.keymap.set('n', '<leader>fs', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>fp', extensions.projects.projects, {})
 
 -- LSP --
 vim.api.nvim_create_autocmd('LspAttach', {
@@ -189,7 +210,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
 		vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
 		vim.keymap.set("n", "<leader>ca", function() vim.lsp.buf.code_action() end, opts)
-		--vim.keymap.set("n", "gr", function() vim.lsp.buf.references() end, opts)
 		vim.keymap.set("n", "gi", function() vim.lsp.buf.implementation() end, opts)
 		vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
 		vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
