@@ -30,7 +30,7 @@ require("lazy").setup({
 	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
 	{"nvim-lualine/lualine.nvim", dependencies =  'nvim-tree/nvim-web-devicons' },
 	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
-	{'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons'},
+	-- {'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons'},
 	{'hrsh7th/cmp-nvim-lsp'},
 	{'hrsh7th/nvim-cmp'},
 {
@@ -132,7 +132,7 @@ require("nvim-tree").setup({
     },
   },
   diagnostics = {
-	  enable = true,
+    enable = true,
   },
   sync_root_with_cwd = true,
   respect_buf_cwd = true,
@@ -179,7 +179,7 @@ cmp.setup{
 -- LSP CONFIG --
 require("mason").setup()
 require("mason-lspconfig").setup {
-    ensure_installed = { "rust_analyzer", "pyright", "gopls", "vale_ls" },
+    ensure_installed = { "rust_analyzer", "pyright", "gopls", "vale_ls", "clangd"},
     automatic_installation = true,
 }
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -188,17 +188,58 @@ require("lspconfig").rust_analyzer.setup { capabilities = capabilities, }
 require("lspconfig").gopls.setup { capabilities = capabilities, }
 require("lspconfig").pyright.setup { capabilities = capabilities, }
 require("lspconfig").vale_ls.setup { capabilities = capabilities, }
+require("lspconfig").clangd.setup { capabilities = capabilities, }
 
 require('lualine').setup()
-require('bufferline').setup()
 require("ibl").setup()
 
+-- Trouble
+require("trouble").setup{
+	modes = {
+		-- more advanced example that extends the lsp_document_symbols
+		symbols = {
+			desc = "document symbols",
+			mode = "lsp_document_symbols",
+			focus = false,
+			win = { position = "right" },
+			filter = {
+				-- remove Package since luals uses it for control flow structures
+				["not"] = { ft = "lua", kind = "Package" },
+				any = {
+					-- all symbol kinds for help / markdown files
+					ft = { "help", "markdown" },
+					-- default set of symbol kinds
+					kind = {
+						"Class",
+						"Constructor",
+						"Enum",
+						"Field",
+						"Function",
+						"Interface",
+						"Method",
+						"Module",
+						"Namespace",
+						"Package",
+						"Property",
+						"Struct",
+						"Trait",
+					},
+				},
+			},
+		},
+	},
+}
+
+
 -- TELESCOPE PLUGIN --
-require('telescope').setup {}
+require('telescope').setup {
+  defaults = {
+    file_ignore_patterns = { "vendor", ".git", ".cargo"},
+  }
+}
 local builtin = require('telescope.builtin')
 require('telescope').load_extension('projects')
 local extensions = require('telescope').extensions
-vim.keymap.set('n', '<leader>fs', builtin.lsp_dynamic_workspace_symbols, {})
 vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
 vim.keymap.set('n', '<leader>fg', builtin.git_files, {})
 vim.keymap.set('n', '<leader>fp', extensions.projects.projects, {})
@@ -213,18 +254,16 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.keymap.set("n", "gi", function() vim.lsp.buf.implementation() end, opts)
 		vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
 		vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
-
 		vim.keymap.set("n", "gr", function() require("trouble").toggle("lsp_references") end)
-		vim.keymap.set("n", "<leader>td", function() require("trouble").toggle("document_diagnostics") end)
-		vim.keymap.set("n", "<leader>tw", function() require("trouble").toggle("workspace_diagnostics") end)
-		vim.keymap.set("n", "<leader>tr", function() require("trouble").toggle("lsp_references") end)
-		vim.keymap.set("n", "<leader>tf", function() require("trouble").toggle("lsp_definitions") end)
-		vim.keymap.set("n", "<leader>tq", function() require("trouble").toggle("quickfix") end)
-		vim.keymap.set("n", "<leader>tl", function() require("trouble").toggle("loclist") end)
+
+		vim.keymap.set("n", "<leader>sd", function() 
+			require("trouble").toggle("diagnostics") 
+		end)
+		vim.keymap.set("n", "<leader>ss", function() 
+			require("trouble").toggle("symbols")
+		end)
 	end,
 })
-
-vim.keymap.set("n", "<leader>tt", function() require("trouble").toggle() end)
 
 --disable Ex mode
 map('n', 'Q', '<NOP>', {noremap = true})
