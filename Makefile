@@ -38,10 +38,10 @@ zypper-packages:
 		gcc-c++ \
 		gdb \
 		git-core \
+		git-delta \
 		git-email \
 		go \
 		golang-packaging \
-		gnome-pomodoro \
 		helm \
 		jq \
 		k9s \
