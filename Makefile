@@ -8,6 +8,7 @@ GIT_SUSE_CONFIG := $(HOME)/.gitconfig_suse
 BACKUP_DIR ?= $(PWD)/backup
 FONTS_DIR ?= $(HOME)/.local/share/fonts
 BIN_DIR ?= $(HOME)/.local/bin
+NVIM_VERSION ?= v0.10.4
 
 
 all: install reconfigure
@@ -55,7 +56,6 @@ zypper-packages:
 		tmux \
 		unzip \
 		valgrind \
-		vim \
 		virt-install \
 		wget \
 		zsh
@@ -121,13 +121,13 @@ $(BIN_DIR):
 	mkdir $@
 	
 $(BIN_DIR)/nvim: $(BIN_DIR)
-	curl -L -o /tmp/nvim.appimage https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+	curl -L -o /tmp/nvim.appimage https://github.com/neovim/neovim/releases/download/$(NVIM_VERSION)/nvim-linux-x86_64.appimage
 	chmod u+x /tmp/nvim.appimage
 	cp /tmp/nvim.appimage $@
 
 .PHONY: vim
 vim: $(BIN_DIR)/nvim
-	ln -s -f $(PWD)/vim ~/.config/nvim
+	git clone --depth 1 git@github.com:jvanz/astronvim-template.git $(HOME)/.config/nvim
 
 git-config: 
 	# Configure git
