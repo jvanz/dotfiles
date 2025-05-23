@@ -8,7 +8,12 @@ fi
 export SUSE="$HOME/suse"
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/.local/bin:$HOME/go/bin:$HOME/.rd/bin/:$SUSE/bin:$PATH
+
 export EDITOR='nvim'
+
+# dotnet configuration
+export DOTNET_ROOT=$HOME/dotnet
+export PATH=$PATH:$HOME/dotnet
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -124,3 +129,7 @@ POWERLEVEL9K_DISABLE_RPROMPT=true
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+
+export WASMTIME_HOME="$HOME/.wasmtime"
+
+export PATH="$WASMTIME_HOME/bin:$PATH"
