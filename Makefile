@@ -33,6 +33,7 @@ zypper-packages:
 		deja-dup \
 		docker \
 		doxygen \
+		fd \
 		flatpak \
 		gcc \
 		gcc-c++ \
@@ -51,6 +52,7 @@ zypper-packages:
 		osc \
 		podman \
 		quilt \
+		ripgrep \
 		secret-tool \
 		strace \
 		tmux \
